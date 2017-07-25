@@ -1,0 +1,10 @@
+set(file_list "")
+file( GLOB APP_SOURCES *.cpp )
+foreach( cpp_file ${APP_SOURCES} )
+    string( REPLACE ".cpp" "" testname ${cpp_file} )
+    get_filename_component(test_name ${testname} NAME_WE)
+    add_library( ${test_name} ${cpp_file} )
+    list(APPEND file_list ${test_name})
+endforeach( cpp_file ${APP_SOURCES} )
+
+set(ANALYSIS ${file_list} PARENT_SCOPE)
