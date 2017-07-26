@@ -31,16 +31,28 @@ namespace GPUCompute {
             auto m = Matrix(1, 1);
             m(0, 0) = t.flat<Numeric_t>().data()[0];
             return m;
+        } else if (t.dims() == 1) {
+            // For now always return a column vector
+            auto m = Eigen::Map<Eigen::Matrix<
+                Numeric_t,
+                Eigen::Dynamic,
+                Eigen::Dynamic,
+                Eigen::RowMajor>>(
+                t.flat<Numeric_t>().data(),
+                t.dim_size(0),
+                1);
+            return m;
+        } else {
+            auto m = Eigen::Map<Eigen::Matrix<
+                Numeric_t,       /* scalar element type */
+                Eigen::Dynamic, /* num_rows is a run-time value */
+                Eigen::Dynamic, /* num_cols is a run-time value */
+                Eigen::RowMajor /* tensorflow::Tensor is always row-major */>>(
+                t.flat<Numeric_t>().data(), /* ptr to data */
+                t.dim_size(0),             /* num_rows */
+                t.dim_size(1) /* num_cols */);
+            return m;
         }
-        auto m = Eigen::Map<Eigen::Matrix<
-            Numeric_t,       /* scalar element type */
-            Eigen::Dynamic, /* num_rows is a run-time value */
-            Eigen::Dynamic, /* num_cols is a run-time value */
-            Eigen::RowMajor /* tensorflow::Tensor is always row-major */>>(
-            t.flat<Numeric_t>().data(), /* ptr to data */
-            t.dim_size(0),             /* num_rows */
-            t.dim_size(1) /* num_cols */);
-        return m;
     };
 
     Tensor ComputeEngine::getTensorFromMatrix(const Matrix &M1) {
