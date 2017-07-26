@@ -2,3 +2,5 @@ build/
 external/
 .vscode/
 .clang-format
+
+!cmake/external
