@@ -12,9 +12,12 @@ mark_as_advanced(EXTERNAL_DIR)
 # Add modules
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
-include(cmake/tensorflow-cmake.cmake)
+include(cmake/tensorflow.cmake)
 include(cmake/SetCompilerFlags.cmake)
-include(cmake/json.cmake)
+
+configure_file(cmake/external/CMakeLists.txt ${CMAKE_BINARY_DIR}/external/CMakeLists.txt)
+execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/external)
+execute_process(COMMAND ${CMAKE_COMMAND} --build . WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/external)
 
 
 set(PROJECT_LIBRARIES ${TF_LIBRARIES})
@@ -38,8 +41,6 @@ add_subdirectory(src/analysis)
 add_subdirectory(src/ComputeEngine)
 
 add_library(gpucompute gpucompute.cpp gpucompute.hpp)
-add_dependencies(${COMPUTE_ENGINE} tensorflow-cmake)
-add_dependencies(${UTILS} json)
 
 # Add testing executable
 add_executable(tftest tftest.cpp)
