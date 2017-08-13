@@ -67,4 +67,19 @@ namespace GPUCompute {
     void fillWithRandom(Matrix &M) {
         fillWithRandom(M, 0, 1);
     }
+
+    std::vector<int> colMaxes(const Matrix &I) {
+        std::vector<int> maxes = {};
+        const int cols = I.cols();
+        for (int i = 0; i < cols; ++i)
+            maxes.push_back(I.col(i).maxCoeff());
+        return maxes;
+    }
+
+    bool areMatricesEqual(Matrix a, Matrix b) {
+        const Matrix o = zipMatrices(a, b, [](auto v1, auto v2, auto i, auto j) {
+            return v1 - v2;
+        });
+        return o.sum() == 0;
+    }
 }

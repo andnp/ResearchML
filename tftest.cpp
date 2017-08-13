@@ -57,66 +57,6 @@ void toy() {
     std::cout << Temp << std::endl;
 }
 
-template<typename T>
-T sum(const std::vector<T> &v) {
-    T total = 0;
-    for (int i = 0; i < v.size(); ++i) total += v[i];
-    return total;
-}
-
-template<typename T>
-void add(std::vector<T> &v, const T num) {
-    for (int i = 0; i < v.size(); ++i) v[i] = v[i] + num;
-}
-
-std::vector<int> colMaxes(const Matrix &I) {
-    std::vector<int> maxes = {};
-    const int cols = I.cols();
-    for (int i = 0; i < cols; ++i) maxes.push_back(I.col(i).maxCoeff());
-    return maxes;
-}
-
-void oneHot(const Matrix &I, Matrix &O) {
-    const int rows = I.rows();
-    const int cols = I.cols();
-    auto maxes = colMaxes(I);
-    add(maxes, 1);
-    const int numNewCols = sum(maxes);
-    int offset = 0;
-    O = Matrix::Zero(rows, numNewCols);
-    for (int j = 0; j < cols; ++j) {
-        for (int i = 0; i < rows; ++i) {
-            O(i, offset + I(i, j)) = 1;
-        }
-        offset += maxes[j];
-    }
-}
-
-template<class Func_t>
-void splitMinibatch(ComputeEngine &CE, Input X, Input Y, int samples, int batch_size, Func_t f) {
-    const int num_splits = ceil(samples / batch_size);
-    auto Splits = CE.Concat({CE.Fill({num_splits - 1}, batch_size), {-1}}, 0);
-    auto X_batches = CE.SplitV(X, Splits, 1, num_splits);
-    auto Y_batches = CE.SplitV(Y, Splits, 1, num_splits);
-    int accum_samples = 0;
-    for (int i = 0; i < num_splits; ++i) {
-        // assume each batch as batch_size number of samples
-        int batch_samples = batch_size;
-        // on the last batch we may have fewer samples if not evenly divisible. Account for that here
-        if (i == num_splits - 1) batch_samples = samples - accum_samples;
-        accum_samples += batch_samples;
-
-        f(CE, X_batches[i], Y_batches[i], batch_samples);
-    }
-}
-
-tensorflow::Output leastSquaresLoss(ComputeEngine &CE, Input Yhat, Input Y) {
-    auto d = CE.Sub(Y, Yhat);
-    auto m = CE.Multiply(d, d);
-    auto s = CE.Sum(CE.Sum(m, 1), 0);
-    return CE.Sqrt(s);
-}
-
 void LR() {
     const std::string data_path = "~/Projects/research/ml_data/cifar10.csv";
     Matrix CIFAR;

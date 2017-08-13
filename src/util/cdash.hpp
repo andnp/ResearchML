@@ -5,6 +5,7 @@
 #include <sstream>
 
 namespace GPUCompute {
+namespace _ {
     template <class T, class UnaryFunction>
     void forEach(T vector, UnaryFunction f) {
         std::for_each(vector.begin(), vector.end(), f);
@@ -30,4 +31,24 @@ namespace GPUCompute {
         }
         return out;
     }
+
+    template <typename T>
+    T sum(const std::vector<T> &v) {
+        T total = 0;
+        for (int i = 0; i < v.size(); ++i)
+            total += v[i];
+        return total;
+    }
+
+    template <typename T>
+    void add(std::vector<T> &v, const T num) {
+        for (int i = 0; i < v.size(); ++i)
+            v[i] = v[i] + num;
+    }
+
+    template <typename T>
+    bool isClose(T a, T b) {
+        return std::abs(a - b) < 1e-6;
+    }
+}  // namespace _
 }  // namespace GPUCompute

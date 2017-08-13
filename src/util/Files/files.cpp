@@ -17,7 +17,7 @@ namespace GPUCompute {
             return;
         }
         str = getPath(str);
-        std::vector<std::string> x = split(str, '/');
+        std::vector<std::string> x = _::split(str, '/');
         std::string f = "";
         int offset = 1;
         if (str.back() == '/') offset = 0;

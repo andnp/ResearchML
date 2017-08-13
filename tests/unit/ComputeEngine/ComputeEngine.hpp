@@ -2,13 +2,6 @@
 #include "gpucompute.hpp"
 using namespace GPUCompute;
 
-bool areMatricesEqual(Matrix a, Matrix b) {
-    const Matrix o = zipMatrices(a, b, [](auto v1, auto v2, auto i, auto j) {
-        return v1 - v2;
-    });
-    return o.sum() == 0;
-}
-
 // we should be able to transfer from a cpu matrix to a heterogeneous matrix
 TEST(ComputeEngine, matrix2tensor2matrix) {
     ComputeEngine CE;

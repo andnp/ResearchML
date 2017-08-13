@@ -50,4 +50,7 @@ namespace GPUCompute {
         }
         return o;
     }
+
+    std::vector<int> colMaxes(const Matrix &I);
+    bool areMatricesEqual(Matrix a, Matrix b);
 }
