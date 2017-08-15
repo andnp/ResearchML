@@ -4,7 +4,7 @@
 namespace GPUCompute {
     template <class Func_t>
     void splitMinibatch(ComputeEngine &CE, Input X, Input Y, int samples, int batch_size, Func_t f) {
-        const int num_splits = ceil(samples / batch_size);
+        const int num_splits = ceil(static_cast<Numeric_t>(samples) / static_cast<Numeric_t>(batch_size));
         auto Splits = CE.Concat({CE.Fill({num_splits - 1}, batch_size), {-1}}, 0);
         auto X_batches = CE.SplitV(X, Splits, 1, num_splits);
         auto Y_batches = CE.SplitV(Y, Splits, 1, num_splits);

@@ -27,8 +27,22 @@ namespace _ {
     std::vector<T> times(int n, Func_t f) {
         std::vector<T> out = {};
         for (int i = 0; i < n; ++i) {
-            out.push_back(f(n));
+            out.push_back(f(i));
         }
+        return out;
+    }
+
+    template <class Func_t>
+    void times(int n, Func_t f) {
+        for (int i = 0; i < n; ++i)
+            f(i);
+    }
+
+    template <typename T>
+    std::vector<T> concat(std::vector<T> &v1, std::vector<T> &v2) {
+        std::vector<T> out = {};
+        out.insert(out.end(), v1.begin(), v1.end());
+        out.insert(out.end(), v2.begin(), v2.end());
         return out;
     }
 
