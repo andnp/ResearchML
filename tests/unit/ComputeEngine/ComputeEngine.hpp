@@ -13,7 +13,7 @@ TEST(ComputeEngine, matrix2tensor2matrix) {
     auto n = CE.getMatrixFromTensor(t);
 
 
-    EXPECT_TRUE(areMatricesEqual(m, n));
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(m, n));
 }
 
 // ---
@@ -39,7 +39,7 @@ TEST(ComputeEngine, add) {
     Matrix e(2, 2);
     e << 2, 4, 6, 8;
 
-    EXPECT_TRUE(areMatricesEqual(o, e));
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(o, e));
 }
 
 // we can add two matrices
@@ -60,7 +60,7 @@ TEST(ComputeEngine, addDifferent) {
 
     auto o = outputs[0];
 
-    EXPECT_TRUE(areMatricesEqual(o, e));
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(o, e));
 }
 
 // ---
@@ -85,7 +85,7 @@ TEST(ComputeEngine, sub) {
 
     auto o = outputs[0];
 
-    EXPECT_TRUE(areMatricesEqual(o, e));
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(o, e));
 }
 
 // ------
@@ -110,7 +110,7 @@ TEST(ComputeEngine, MatMul) {
     e << 26, 20, 71, 56;
 
     auto o = outputs[0];
-    EXPECT_TRUE(areMatricesEqual(o, e));
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(o, e));
 }
 
 // we can perform a matrix multiplication with the first matrix transposed
@@ -132,7 +132,7 @@ TEST(ComputeEngine, MatMul_transposeA) {
 
     auto o = outputs[0];
 
-    EXPECT_TRUE(areMatricesEqual(o, e));
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(o, e));
 }
 
 // we can perform a matrix multiplication with the second matrix transposed
@@ -154,7 +154,7 @@ TEST(ComputeEngine, MatMul_transposeB) {
 
     auto o = outputs[0];
 
-    EXPECT_TRUE(areMatricesEqual(o, e));
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(o, e));
 }
 
 // ---
@@ -177,7 +177,7 @@ TEST(ComputeEngine, Sum_dim1) {
 
     auto o = outputs[0];
 
-    EXPECT_TRUE(areMatricesEqual(o, e));
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(o, e));
 }
 
 // we can get the sum across one axis of a tensor (matrix)
@@ -196,7 +196,7 @@ TEST(ComputeEngine, Sum_dim2) {
 
     auto o = outputs[0];
 
-    EXPECT_TRUE(areMatricesEqual(o, e));
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(o, e));
 }
 
 // we can get the sum across both axes of a tensor (matrix)
@@ -216,7 +216,7 @@ TEST(ComputeEngine, Sum_bothDims) {
 
     auto o = outputs[0];
 
-    EXPECT_TRUE(areMatricesEqual(o, e));
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(o, e));
 }
 
 // --------
@@ -239,7 +239,7 @@ TEST(ComputeEngine, Multiple_broadcast) {
 
     auto o = outputs[0];
 
-    EXPECT_TRUE(areMatricesEqual(o, e));
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(o, e));
 }
 
 TEST(ComputeEngine, Multiple_elementwise) {
@@ -261,7 +261,7 @@ TEST(ComputeEngine, Multiple_elementwise) {
 
     auto o = outputs[0];
 
-    EXPECT_TRUE(areMatricesEqual(o, e));
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(o, e));
 }
 
 // ---
@@ -288,6 +288,6 @@ TEST(ComputeEngine, implicitRun) {
 
     auto o = outputs[0];
 
-    EXPECT_TRUE(areMatricesEqual(o, e));
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(o, e));
 }
 

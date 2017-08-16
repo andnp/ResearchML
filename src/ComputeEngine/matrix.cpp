@@ -8,6 +8,8 @@
 
 namespace GPUCompute {
     DataType Tensor_t = DT_DOUBLE;
+
+namespace MatrixUtil {
     std::vector<int> getDimensions(std::string file) {
         int col = 0;
         int row = 0;
@@ -68,7 +70,7 @@ namespace GPUCompute {
         fillWithRandom(M, 0, 1);
     }
 
-    std::vector<int> colMaxes(const Matrix &I) {
+    std::vector<int> colMaxes(const MatrixRef I) {
         std::vector<int> maxes = {};
         const int cols = I.cols();
         for (int i = 0; i < cols; ++i)
@@ -76,10 +78,10 @@ namespace GPUCompute {
         return maxes;
     }
 
-    bool areMatricesEqual(Matrix a, Matrix b) {
+    bool areMatricesEqual(MatrixRef a, MatrixRef b) {
         const Matrix o = zipMatrices(a, b, [](auto v1, auto v2, auto i, auto j) {
             return v1 - v2;
         });
         return o.sum() == 0;
     }
-}
+}}

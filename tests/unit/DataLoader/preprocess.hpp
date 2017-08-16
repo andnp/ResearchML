@@ -15,9 +15,9 @@ TEST(preprocess, oneHot_singleColumn) {
             0, 0, 0, 0, 0, 1;
 
     Matrix n;
-    oneHot(m, n);
+    Preprocess::oneHot(m, n);
 
-    EXPECT_TRUE(areMatricesEqual(n, e));
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(n, e));
 }
 
 TEST(preprocess, oneHot_multipleColumn) {
@@ -32,7 +32,29 @@ TEST(preprocess, oneHot_multipleColumn) {
             0, 0, 1, 1, 0, 0;
 
     Matrix n;
-    oneHot(m, n);
+    Preprocess::oneHot(m, n);
 
-    EXPECT_TRUE(areMatricesEqual(n, e));
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(n, e));
+}
+
+TEST(preprocess, Scaler) {
+    Matrix m(3, 2);
+    m << 1, 3,
+         -100, 2,
+         -2, -7;
+
+    Matrix e(3, 2);
+    e << 0, 1,
+         0, 1,
+         1, 0;
+
+    json scaler_config = {
+        {"min", 0},
+        {"max", 1}
+    };
+    Preprocess::Scaler scaler(scaler_config);
+    scaler.inferRange(m);
+    scaler.scale(m);
+
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(m, e));
 }

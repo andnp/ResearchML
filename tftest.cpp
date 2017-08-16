@@ -60,12 +60,12 @@ void toy() {
 void LR() {
     const std::string data_path = "~/Projects/research/ml_data/cifar10.csv";
     Matrix CIFAR;
-    readMatrix(data_path, CIFAR);
+    MatrixUtil::readMatrix(data_path, CIFAR);
 
     Matrix X = CIFAR.block(0, 1, 60000, 1024);
     Matrix Yindex = CIFAR.block(0, 0, 60000, 1);
     Matrix Y;
-    oneHot(Yindex, Y);
+    Preprocess::oneHot(Yindex, Y);
 
     const int samples = X.rows();
     const int features = X.cols();
@@ -74,8 +74,12 @@ void LR() {
     X.transposeInPlace();
     Y.transposeInPlace();
 
+    Preprocess::Scaler scaler;
+    scaler.inferRange(X);
+    scaler.scale(X);
+
     Matrix w(classes, features);
-    fillWithRandom(w, 0, 1);
+    MatrixUtil::fillWithRandom(w, 0, 1);
 
     ComputeEngine CE;
 
@@ -92,14 +96,14 @@ void LR() {
     auto Y_ = CE.Var(Y);
     // auto NW = CE.Copy(W);
 
-    splitMinibatch(CE, X_, Y_, 60000, 100, [&W](auto &CE, auto X, auto Y, int batch_samples) {
+    splitMinibatch(CE, X_, Y_, samples, 100, [&W](auto &CE, auto X, auto Y, int batch_samples) {
         Numeric_t scaling = static_cast<Numeric_t>(batch_samples);
 
         auto Z = CE.MatMul(W, X);
         auto S = CE.Sigmoid(Z);
         auto E = CE.Sub(S, Y);
         auto G = CE.Div(CE.MatMul(E, X, MatMul::TransposeB(true)), scaling);
-        auto GR = CE.Add(CE.Multiply(W, 2.0 * 0), G);
+        auto GR = CE.Add(CE.Multiply(W, 2.0 * 0.0001), G);
 
         W = CE.AssignSub(W, CE.Multiply(GR, 0.01));
     });
@@ -111,10 +115,15 @@ void LR() {
     auto NE = leastSquaresLoss(CE, Yhat, Y_);
 
     const int steps = 10000;
-    for (int s = 0; s < steps / 100; ++s) {
+    const int epochs = 10;
+    for (int s = 0; s < epochs; ++s) {
         auto outs = CE.run({}, {}, {NE});
-        std::cout << outs[0] << std::endl;
+        std::cout << outs[0] / static_cast<Numeric_t>(samples) << std::endl;
     }
+
+    auto Parameters = CE.run({}, {}, {W});
+
+    std::cout << Parameters[0] << std::endl;
 }
 
 int main() {

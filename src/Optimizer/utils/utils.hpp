@@ -4,6 +4,9 @@
 namespace GPUCompute {
     template <class Func_t>
     void splitMinibatch(ComputeEngine &CE, Input X, Input Y, int samples, int batch_size, Func_t f) {
+        // if there can only be one batch, don't try to split the data. tensorflow throws an error
+        if (batch_size >= samples) return f(CE, X, Y, samples);
+
         const int num_splits = ceil(static_cast<Numeric_t>(samples) / static_cast<Numeric_t>(batch_size));
         auto Splits = CE.Concat({CE.Fill({num_splits - 1}, batch_size), {-1}}, 0);
         auto X_batches = CE.SplitV(X, Splits, 1, num_splits);

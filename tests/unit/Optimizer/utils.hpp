@@ -39,8 +39,8 @@ TEST(Optimizer_utils, splitMinibatch) {
     Matrix oy(1, samples);
     oy << outputs[4], outputs[5], outputs[6], outputs[7];
 
-    EXPECT_TRUE(areMatricesEqual(x, ox));
-    EXPECT_TRUE(areMatricesEqual(y, oy));
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(x, ox));
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(y, oy));
 }
 
 // we should be able to split the dataset into minibatches with the number of samples not evenly divisible by batch size
@@ -84,6 +84,6 @@ TEST(Optimizer_utils, splitMinibatch_notDivisible) {
     Matrix oy(1, samples);
     oy << outputs[2], outputs[3];
 
-    EXPECT_TRUE(areMatricesEqual(x, ox));
-    EXPECT_TRUE(areMatricesEqual(y, oy));
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(x, ox));
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(y, oy));
 }

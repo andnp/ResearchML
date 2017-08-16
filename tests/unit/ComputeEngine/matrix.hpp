@@ -9,7 +9,7 @@ TEST(matrix, iterateMatrix) {
             5, 6,
             7, 8;
 
-    iterateMatrix(m, [&m](auto v, auto i, auto j) {
+    MatrixUtil::iterateMatrix(m, [&m](auto v, auto i, auto j) {
         EXPECT_EQ(m(i, j), v);
         return 0;
     });
@@ -26,7 +26,7 @@ TEST(matrix, zipMatrices) {
     n <<    5, 6,
             7, 8;
 
-    zipMatrices(m, n, [&m, &n](auto v1, auto v2, auto i, auto j) {
+    MatrixUtil::zipMatrices(m, n, [&m, &n](auto v1, auto v2, auto i, auto j) {
         EXPECT_EQ(m(i, j), v1);
         EXPECT_EQ(n(i, j), v2);
         return 0;
@@ -38,10 +38,10 @@ TEST(matrix, fillWithRandom) {
     Matrix m = Matrix::Zero(10, 10);
     Matrix n = Matrix::Zero(10, 10);
 
-    fillWithRandom(m);
-    fillWithRandom(n);
+    MatrixUtil::fillWithRandom(m);
+    MatrixUtil::fillWithRandom(n);
 
-    zipMatrices(m, n, [](auto v1, auto v2, auto i, auto j) {
+    MatrixUtil::zipMatrices(m, n, [](auto v1, auto v2, auto i, auto j) {
         EXPECT_NE(v1, v2);
         return 0;
     });

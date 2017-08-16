@@ -17,16 +17,18 @@ namespace GPUCompute {
     using Matrix = Eigen::MatrixXd;
     using Vector = Eigen::VectorXd;
     using MatrixRef = Eigen::Ref<const Matrix>;
+    using MutMatrixRef = Eigen::Ref<Matrix>;
     extern DataType Tensor_t;
     typedef double Numeric_t;
 
+namespace MatrixUtil {
     std::vector<int> getDimensions(std::string file);
     void readMatrix(std::string file, Matrix &X);
     void fillWithRandom(Matrix &M);
     void fillWithRandom(Matrix &M, float mean, float sigma);
 
     template<class Func_t>
-    Matrix iterateMatrix(Matrix &M, Func_t f) {
+    Matrix iterateMatrix(MatrixRef M, Func_t f) {
         const int cols = M.cols();
         const int rows = M.rows();
         Matrix o(rows, cols);
@@ -39,7 +41,7 @@ namespace GPUCompute {
     }
 
     template<class Func_t>
-    Matrix zipMatrices(Matrix &M, Matrix &N, Func_t f) {
+    Matrix zipMatrices(MatrixRef M, MatrixRef N, Func_t f) {
         const int cols = M.cols();
         const int rows = M.rows();
         Matrix o(rows, cols);
@@ -51,6 +53,6 @@ namespace GPUCompute {
         return o;
     }
 
-    std::vector<int> colMaxes(const Matrix &I);
-    bool areMatricesEqual(Matrix a, Matrix b);
-}
+    std::vector<int> colMaxes(const MatrixRef I);
+    bool areMatricesEqual(MatrixRef a, MatrixRef b);
+}}
