@@ -15,11 +15,6 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 include(cmake/tensorflow.cmake)
 include(cmake/SetCompilerFlags.cmake)
 
-configure_file(cmake/external/CMakeLists.txt ${CMAKE_BINARY_DIR}/external/CMakeLists.txt)
-execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/external)
-execute_process(COMMAND ${CMAKE_COMMAND} --build . WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/external)
-
-
 set(PROJECT_LIBRARIES ${TF_LIBRARIES})
 
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")

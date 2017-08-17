@@ -1,4 +1,7 @@
-set(TF_INCLUDE ${EXTERNAL_DIR}/tensorflow/include/google/tensorflow ${EXTERNAL_DIR}/tensorflow/include ${EXTERNAL_DIR}/tensorflow/include/google/tensorflow/third_party/eigen3 ${EXTERNAL_DIR}/Eigen-headers)
+set(TF_INCLUDE  ${EXTERNAL_DIR}/tensorflow/include/google/tensorflow
+                ${EXTERNAL_DIR}/tensorflow/include
+                ${EXTERNAL_DIR}/src/Eigen
+                ${EXTERNAL_DIR}/include)
 find_library(TF_LIB NAMES tensorflow_all
         HINTS
         ${EXTERNAL_DIR}/tensorflow/lib

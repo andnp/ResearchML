@@ -8,6 +8,7 @@ BUILD_DIR=$1
 if [ ! -e ${BUILD_DIR}/.done ]; then
 
     cd ${BUILD_DIR}
+    ./configure
 
 cat <<EOF >> tensorflow/BUILD
 # Added build rule
