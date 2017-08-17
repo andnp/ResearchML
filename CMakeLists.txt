@@ -34,6 +34,8 @@ add_subdirectory(src/algorithms)
 add_subdirectory(src/util)
 add_subdirectory(src/analysis)
 add_subdirectory(src/ComputeEngine)
+add_subdirectory(src/DataLoader)
+add_subdirectory(src/Optimizer)
 
 add_library(gpucompute gpucompute.cpp gpucompute.hpp)
 
@@ -42,7 +44,7 @@ add_executable(tftest tftest.cpp)
 
 # Make sure this only builds when tensorflow is done installing
 add_dependencies(tftest gpucompute)
-target_link_libraries(gpucompute ${ALGORITHMS} ${ANALYSIS} ${COMPUTE_ENGINE} ${UTILS} ${PROJECT_LIBRARIES})
+target_link_libraries(gpucompute ${ALGORITHMS} ${OPTIMIZER} ${ANALYSIS} ${DATALOADER} ${COMPUTE_ENGINE} ${UTILS} ${PROJECT_LIBRARIES})
 target_link_libraries(tftest gpucompute)
 
 if (BUILD_TESTS)

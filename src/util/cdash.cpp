@@ -1,6 +1,7 @@
 #include "cdash.hpp"
 
 namespace GPUCompute {
+namespace _ {
     std::vector<std::string> split(const std::string &s, char delim) {
         std::vector<std::string> elems;
         std::stringstream ss;
@@ -11,4 +12,4 @@ namespace GPUCompute {
         }
         return elems;
     }
-}
+}}

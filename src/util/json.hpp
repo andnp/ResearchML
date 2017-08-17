@@ -9,4 +9,11 @@ namespace GPUCompute {
 
     std::string getJsonString(const json &js);
     void extendJson(json &j1, const json &j2);
+
+    class JsonConfig {
+        virtual json getDefault() = 0;
+    public:
+        json config;
+        void setConfig(json &j);
+    };
 }

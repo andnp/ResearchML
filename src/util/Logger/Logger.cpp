@@ -128,7 +128,7 @@ Logger &Logger::instance() {
         if (file == "") {
             return "";
         }
-        std::vector<std::string> x = split(file, '/');
+        std::vector<std::string> x = _::split(file, '/');
         std::string f = "";
         int offset = 1;
         if (file.back() == '/') offset = 0;

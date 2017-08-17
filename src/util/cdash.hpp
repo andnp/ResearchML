@@ -5,6 +5,7 @@
 #include <sstream>
 
 namespace GPUCompute {
+namespace _ {
     template <class T, class UnaryFunction>
     void forEach(T vector, UnaryFunction f) {
         std::for_each(vector.begin(), vector.end(), f);
@@ -26,8 +27,42 @@ namespace GPUCompute {
     std::vector<T> times(int n, Func_t f) {
         std::vector<T> out = {};
         for (int i = 0; i < n; ++i) {
-            out.push_back(f(n));
+            out.push_back(f(i));
         }
         return out;
     }
+
+    template <class Func_t>
+    void times(int n, Func_t f) {
+        for (int i = 0; i < n; ++i)
+            f(i);
+    }
+
+    template <typename T>
+    std::vector<T> concat(std::vector<T> &v1, std::vector<T> &v2) {
+        std::vector<T> out = {};
+        out.insert(out.end(), v1.begin(), v1.end());
+        out.insert(out.end(), v2.begin(), v2.end());
+        return out;
+    }
+
+    template <typename T>
+    T sum(const std::vector<T> &v) {
+        T total = 0;
+        for (int i = 0; i < v.size(); ++i)
+            total += v[i];
+        return total;
+    }
+
+    template <typename T>
+    void add(std::vector<T> &v, const T num) {
+        for (int i = 0; i < v.size(); ++i)
+            v[i] = v[i] + num;
+    }
+
+    template <typename T>
+    bool isClose(T a, T b) {
+        return std::abs(a - b) < 1e-6;
+    }
+}  // namespace _
 }  // namespace GPUCompute

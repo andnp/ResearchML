@@ -25,4 +25,10 @@ namespace GPUCompute {
             j1[j.key()] = j.value();
         }
     }
+
+    void JsonConfig::setConfig(json &j) {
+        config = {};
+        extendJson(config, getDefault());
+        extendJson(config, j);
+    }
 }

@@ -20,7 +20,8 @@ namespace GPUCompute {
     void checkStatus(const Status &status);
 
 class ComputeEngine {
-    Scope root = (Scope::NewRootScope()).WithDevice("/gpu:0");
+    // Scope root = (Scope::NewRootScope()).WithDevice("/gpu:0");
+    Scope root = Scope::NewRootScope();
     ClientSession *session = new ClientSession(root);
     std::map<std::string, std::shared_ptr<Scope>> sub_scopes;
     std::vector<std::function<void()>> to_init = {};

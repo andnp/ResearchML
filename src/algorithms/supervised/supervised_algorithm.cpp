@@ -10,7 +10,7 @@ namespace GPUCompute {
             return test_helper(P, Y);
         } else if (task == "regression") {
             std::vector<Numeric_t> mse = MSE(P, Y);
-            return mean(mse);
+            return _::mean(mse);
         } else if (task == "multitask_classification") {
             return 1.0 - ClassificationError(P, Y);
         }

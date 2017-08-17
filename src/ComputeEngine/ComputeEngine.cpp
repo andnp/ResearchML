@@ -73,7 +73,7 @@ namespace GPUCompute {
     ClientSession* ComputeEngine::getSession() { return session; };
     tensorflow::Output ComputeEngine::InputVariable() { return Placeholder(root, Tensor_t); };
 
-    tensorflow::OutputList ComputeEngine::InputVariables(int n) { return times<tensorflow::Output>(n, [this](int i) { return InputVariable();}); }
+    tensorflow::OutputList ComputeEngine::InputVariables(int n) { return _::times<tensorflow::Output>(n, [this](int i) { return InputVariable();}); }
 
     tensorflow::Output ComputeEngine::Const(const Input::Initializer &data) {
         return tensorflow::ops::Const(root, data);
@@ -104,7 +104,7 @@ namespace GPUCompute {
 
     void ComputeEngine::InitializeVariables() {
         if (hasInitialized == 1) return;
-        forEach(to_init, [](auto f) {f();});
+        _::forEach(to_init, [](auto f) {f();});
         hasInitialized = 1;
     };
 
