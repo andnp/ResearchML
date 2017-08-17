@@ -115,7 +115,7 @@ void LR() {
     auto NE = leastSquaresLoss(CE, Yhat, Y_);
 
     const int steps = 10000;
-    const int epochs = 10;
+    const int epochs = 1000;
     for (int s = 0; s < epochs; ++s) {
         auto outs = CE.run({}, {}, {NE});
         std::cout << outs[0] / static_cast<Numeric_t>(samples) << std::endl;
