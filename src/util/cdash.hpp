@@ -11,6 +11,17 @@ namespace _ {
         std::for_each(vector.begin(), vector.end(), f);
     }
 
+    template <typename T, class UnaryFunction>
+    std::vector<T> map(std::vector<T> vector, UnaryFunction f) {
+        std::vector<T> out = {};
+        for (int i = 0; i < vector.size(); ++i) {
+            out.push_back(
+                f(vector[i])
+            );
+        }
+        return out;
+    }
+
     std::vector<std::string> split(const std::string &s, char delim);
 
     template <typename T>

@@ -18,6 +18,7 @@ namespace GPUCompute {
     using Vector = Eigen::VectorXd;
     using MatrixRef = Eigen::Ref<const Matrix>;
     using MutMatrixRef = Eigen::Ref<Matrix>;
+    using TFNode = tensorflow::Output;
     extern DataType Tensor_t;
     typedef double Numeric_t;
 

@@ -3,7 +3,7 @@
 
 namespace GPUCompute {
     template <class Func_t>
-    void splitMinibatch(ComputeEngine &CE, Input X, Input Y, int samples, int batch_size, Func_t f) {
+    void splitMinibatch(ComputeEngine &CE, TFNode X, TFNode Y, int samples, int batch_size, Func_t f) {
         // if there can only be one batch, don't try to split the data. tensorflow throws an error
         if (batch_size >= samples) return f(CE, X, Y, samples);
 

@@ -57,6 +57,29 @@ void toy() {
     std::cout << Temp << std::endl;
 }
 
+std::vector<TFNode> shuffleTensors(ComputeEngine &CE, std::vector<TFNode> Tensors) {
+    auto shuffled = _::map<TFNode>(Tensors, [&CE](TFNode T) {
+        return CE.RandomShuffle(T, 0);
+    });
+    return shuffled;
+}
+
+TFNode logisticError(ComputeEngine &CE, TFNode X, TFNode Y, TFNode W) {
+    auto Z = CE.MatMul(W, X);
+    auto S = CE.Sigmoid(Z);
+    auto E = CE.Sub(S, Y);
+    return E;
+}
+
+TFNode gradientGraph(ComputeEngine &CE, TFNode X, TFNode Y, std::vector<TFNode> Parameters, std::vector<int> dims) {
+    TFNode W = Parameters[0];
+    int samples = dims[0];
+    // compute Y - (sig(W * X));
+    auto E = logisticError(CE, X, Y, W);
+    auto G = CE.Div(CE.MatMul(E, X, MatMul::TransposeB(true)), static_cast<Numeric_t>(samples));
+    return CE.Add(CE.Multiply(W, 2.0 * 0.0001), G);
+}
+
 void LR() {
     const std::string data_path = "~/Projects/research/ml_data/cifar10.csv";
     Matrix CIFAR;
@@ -83,8 +106,6 @@ void LR() {
 
     ComputeEngine CE;
 
-    // auto XT = CE.getTensorFromMatrix(X);
-    // auto YT = CE.getTensorFromMatrix(Y);
     auto WT = CE.getTensorFromMatrix(w);
 
     auto W = CE.Var(w);
@@ -94,18 +115,13 @@ void LR() {
 
     auto X_ = CE.Var(X);
     auto Y_ = CE.Var(Y);
-    // auto NW = CE.Copy(W);
+
+    // auto shuffled = shuffleTensors(CE, {X_, Y_});
 
     splitMinibatch(CE, X_, Y_, samples, 100, [&W](auto &CE, auto X, auto Y, int batch_samples) {
-        Numeric_t scaling = static_cast<Numeric_t>(batch_samples);
+        auto G = gradientGraph(CE, X, Y, {W}, {batch_samples});
 
-        auto Z = CE.MatMul(W, X);
-        auto S = CE.Sigmoid(Z);
-        auto E = CE.Sub(S, Y);
-        auto G = CE.Div(CE.MatMul(E, X, MatMul::TransposeB(true)), scaling);
-        auto GR = CE.Add(CE.Multiply(W, 2.0 * 0.0001), G);
-
-        W = CE.AssignSub(W, CE.Multiply(GR, 0.01));
+        W = CE.AssignSub(W, CE.Multiply(G, 0.01));
     });
 
 

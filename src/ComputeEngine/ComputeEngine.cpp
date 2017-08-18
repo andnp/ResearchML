@@ -173,6 +173,10 @@ namespace GPUCompute {
         return Sub(T, Z);
     };
 
+    TFNode ComputeEngine::RandomShuffle(Input a, int seed) {
+        return tensorflow::ops::RandomShuffle(root, a, tensorflow::ops::RandomShuffle::Seed(seed));
+    };
+
     std::vector<Tensor> ComputeEngine::run(const ClientSession::FeedType& inputs, const std::vector<tensorflow::Output> outputs) {
         InitializeVariables();
         std::vector<Tensor> outs;
