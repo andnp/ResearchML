@@ -79,7 +79,7 @@ namespace MatrixUtil {
     }
 
     bool areMatricesEqual(MatrixRef a, MatrixRef b) {
-        const Matrix o = zipMatrices(a, b, [](auto v1, auto v2, auto i, auto j) {
+        const Matrix o = zipMatrices(a, b, [](Numeric_t v1, Numeric_t v2, int i, int j) {
             return v1 - v2;
         });
         return o.sum() == 0;
