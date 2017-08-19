@@ -12,12 +12,20 @@ namespace GPUCompute {
     }
 
     float Random::normal(float mean, float var) {
+        auto r = Random::instance().getEngine();
         std::normal_distribution<float> dist(mean, var);
         return dist(r);
     }
 
     float Random::uniform(float min, float max) {
+        auto r =  Random::instance().getEngine();
         std::uniform_real_distribution<float> dist(min, max);
+        return dist(r);
+    }
+
+    int Random::uniformInt(int min, int max) {
+        auto r = Random::instance().getEngine();
+        std::uniform_int_distribution<int> dist(min, max);
         return dist(r);
     }
 

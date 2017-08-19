@@ -57,7 +57,7 @@ Logger &Logger::instance() {
             Logger::open_files[file] = outfile;
         } else {
             std::map<std::string, std::ofstream*>::iterator item = Logger::open_files.begin();
-            std::advance(item, Random::instance().uniform(0, Logger::open_files.size()));
+            std::advance(item, Random::uniform(0, Logger::open_files.size()));
             Logger::open_files[item->first]->close();
             Logger::open_files.erase(item);
             Logger::open_files[file] = outfile;

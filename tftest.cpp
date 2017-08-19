@@ -58,8 +58,9 @@ void toy() {
 }
 
 std::vector<TFNode> shuffleTensors(ComputeEngine &CE, std::vector<TFNode> Tensors) {
-    auto shuffled = _::map<TFNode>(Tensors, [&CE](TFNode T) {
-        return CE.RandomShuffle(T, 0);
+    int seed = Random::uniformInt(0, 1e8);
+    auto shuffled = _::map<TFNode>(Tensors, [&CE, seed](TFNode T) {
+        return CE.RandomShuffle(T, seed);
     });
     return shuffled;
 }
