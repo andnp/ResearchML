@@ -89,7 +89,7 @@ TEST(Optimizer_utils, splitMinibatch_notDivisible) {
 }
 
 // we should be able to shuffle multiple tensors in the same way (say shuffle X and Y such that rows are still aligned across these tensors)
-TEST(Optimizer_utils, shuffleTensors) {
+TEST(Optimizer_utils, shuffleTensors_single) {
     ComputeEngine CE;
 
     Matrix x(2, 3);
@@ -101,5 +101,42 @@ TEST(Optimizer_utils, shuffleTensors) {
 
     auto output = CE.run({input}, {x}, shuffled);
 
-    std::cout << output[0] << std::endl;
+    auto o = output[0];
+    // Fixed seed, so deterministic output
+    Matrix e(2, 3);
+    e << 2, 3, 1,
+         5, 6, 4;
+
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(e, o));
+}
+
+// we should be able to shuffle multiple tensors in the same way (say shuffle X
+// and Y such that rows are still aligned across these tensors)
+TEST(Optimizer_utils, shuffleTensors_multiple) {
+    ComputeEngine CE;
+
+    Matrix x(2, 3);
+    x << 1, 2, 3,
+         4, 5, 6;
+
+    Matrix y(1, 3);
+    y << 0, 1, 2;
+
+    auto inputs = CE.InputVariables(2);
+    auto shuffled = Optimizer::Util::shuffleTensors(CE, inputs);
+
+    auto output = CE.run(inputs, {x, y}, shuffled);
+
+    auto ox = output[0];
+    auto oy = output[1];
+    // Fixed seed, so deterministic output
+    Matrix ex(2, 3);
+    ex << 2, 3, 1,
+          5, 6, 4;
+
+    Matrix ey(1, 3);
+    ey << 1, 2, 0;
+
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(ex, ox));
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(ey, oy));
 }
