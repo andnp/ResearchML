@@ -2,6 +2,11 @@
 #include "ComputeEngine/ComputeEngine.hpp"
 
 namespace GPUCompute {
+namespace Optimizer {
+namespace Util {
+    // -------------------
+    // Templated Functions
+    // -------------------
     template <class Func_t>
     void splitMinibatch(ComputeEngine &CE, TFNode X, TFNode Y, int samples, int batch_size, Func_t f) {
         // if there can only be one batch, don't try to split the data. tensorflow throws an error
@@ -24,4 +29,9 @@ namespace GPUCompute {
             f(CE, X_batches[i], Y_batches[i], batch_samples);
         }
     }
-}
+
+    // -----------------------
+    // Non-templated Functions
+    // -----------------------
+    std::vector<TFNode> shuffleTensors(ComputeEngine &CE, std::vector<TFNode> Tensors);
+}}}

@@ -57,14 +57,6 @@ void toy() {
     std::cout << Temp << std::endl;
 }
 
-std::vector<TFNode> shuffleTensors(ComputeEngine &CE, std::vector<TFNode> Tensors) {
-    int seed = Random::uniformInt(0, 1e8);
-    auto shuffled = _::map<TFNode>(Tensors, [&CE, seed](TFNode T) {
-        return CE.RandomShuffle(T, seed);
-    });
-    return shuffled;
-}
-
 TFNode logisticError(ComputeEngine &CE, TFNode X, TFNode Y, TFNode W) {
     auto Z = CE.MatMul(W, X);
     auto S = CE.Sigmoid(Z);
@@ -117,9 +109,9 @@ void LR() {
     auto X_ = CE.Var(X);
     auto Y_ = CE.Var(Y);
 
-    // auto shuffled = shuffleTensors(CE, {X_, Y_});
+    // auto shuffled = Optimizer::Util::shuffleTensors(CE, {X_, Y_});
 
-    splitMinibatch(CE, X_, Y_, samples, 100, [&W](auto &CE, auto X, auto Y, int batch_samples) {
+    Optimizer::Util::splitMinibatch(CE, X_, Y_, samples, 100, [&W](auto &CE, auto X, auto Y, int batch_samples) {
         auto G = gradientGraph(CE, X, Y, {W}, {batch_samples});
 
         W = CE.AssignSub(W, CE.Multiply(G, 0.01));

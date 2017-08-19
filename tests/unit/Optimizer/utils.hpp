@@ -25,7 +25,7 @@ TEST(Optimizer_utils, splitMinibatch) {
 
     int batch_size = 1;
     int count = 0;
-    splitMinibatch(CE, inputs[0], inputs[1], samples, batch_size, [&count, &x_outs, &y_outs](auto &CE, auto X, auto Y, int batch_samples) {
+    Optimizer::Util::splitMinibatch(CE, inputs[0], inputs[1], samples, batch_size, [&count, &x_outs, &y_outs](auto &CE, auto X, auto Y, int batch_samples) {
         x_outs[count] = CE.Add(x_outs[count], X);
         y_outs[count] = CE.Add(y_outs[count], Y);
         count++;
@@ -50,8 +50,8 @@ TEST(Optimizer_utils, splitMinibatch_notDivisible) {
     int samples = 4;
     Matrix x(3, samples);
     x << 0, 1, 0, 2,
-        1, 0, 0, 1,
-        0, 0, 1, 4;
+         1, 0, 0, 1,
+         0, 0, 1, 4;
 
     Matrix y(1, samples);
     y << 1, 0, 0, 2;
@@ -68,7 +68,7 @@ TEST(Optimizer_utils, splitMinibatch_notDivisible) {
 
     int batch_size = 3;
     int count = 0;
-    splitMinibatch(CE, inputs[0], inputs[1], samples, batch_size, [&count, &x_outs, &y_outs](auto &CE, auto X, auto Y, int batch_samples) {
+    Optimizer::Util::splitMinibatch(CE, inputs[0], inputs[1], samples, batch_size, [&count, &x_outs, &y_outs](auto &CE, auto X, auto Y, int batch_samples) {
         if (count == 0) EXPECT_EQ(batch_samples, 3);
         else if (count == 1) EXPECT_EQ(batch_samples, 1);
         x_outs[count] = CE.Add(x_outs[count], X);
@@ -86,4 +86,20 @@ TEST(Optimizer_utils, splitMinibatch_notDivisible) {
 
     EXPECT_TRUE(MatrixUtil::areMatricesEqual(x, ox));
     EXPECT_TRUE(MatrixUtil::areMatricesEqual(y, oy));
+}
+
+// we should be able to shuffle multiple tensors in the same way (say shuffle X and Y such that rows are still aligned across these tensors)
+TEST(Optimizer_utils, shuffleTensors) {
+    ComputeEngine CE;
+
+    Matrix x(2, 3);
+    x << 1, 2, 3,
+         4, 5, 6;
+
+    auto input = CE.InputVariable();
+    auto shuffled = Optimizer::Util::shuffleTensors(CE, {input});
+
+    auto output = CE.run({input}, {x}, shuffled);
+
+    std::cout << output[0] << std::endl;
 }
