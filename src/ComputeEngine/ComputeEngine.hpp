@@ -55,6 +55,8 @@ public:
     TFNode Conj(Input A);
     TFNode Sqrt(Input A);
     TFNode RandomShuffle(Input a, int seed);
+    TFNode Identity(Input a);
+    TFNode Transpose(Input a);
 
     // Higher level interface
     TFNode InputVariable();

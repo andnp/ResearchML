@@ -264,6 +264,32 @@ TEST(ComputeEngine, Multiple_elementwise) {
     EXPECT_TRUE(MatrixUtil::areMatricesEqual(o, e));
 }
 
+// ---------
+// Transpose
+// ---------
+
+TEST(ComputeEngine, Transpose) {
+    ComputeEngine CE;
+
+    Matrix m(2, 3);
+    m << 1, 2, 3,
+         4, 5, 6;
+
+    auto input = CE.InputVariable();
+    // Note here that the constant value needs to be a double
+    auto n = CE.Transpose(input);
+    auto outputs = CE.run({input}, {m}, {n});
+
+    Matrix e(3, 2);
+    e << 1, 4,
+         2, 5,
+         3, 6;
+
+    auto o = outputs[0];
+
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(o, e));
+}
+
 // ---
 // Run
 // ---
