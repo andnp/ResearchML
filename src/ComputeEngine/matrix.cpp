@@ -55,7 +55,7 @@ namespace MatrixUtil {
         indata.close();
     }
 
-    void fillWithRandom(Matrix &M, float mean, float sigma) {
+    void fillWithRandom(Matrix &M, Numeric_t mean, Numeric_t sigma) {
         size_t x = M.rows();
         size_t y = M.cols();
 
@@ -83,5 +83,11 @@ namespace MatrixUtil {
             return v1 - v2;
         });
         return o.sum() == 0;
+    }
+
+    Matrix getRandomMatrix(int rows, int cols, Numeric_t mean, Numeric_t sigma) {
+        Matrix x(rows, cols);
+        fillWithRandom(x, mean, sigma);
+        return x;
     }
 }}

@@ -31,12 +31,12 @@ namespace GPUCompute {
     }
 
     std::string Algorithm::parameterString() {
-        std::string out = getJsonString(parameters);
+        std::string out = JSON::getJsonString(parameters);
         return out.substr(0, out.length() - 2);
     }
 
     void Algorithm::loadParameters(json j) {
-        extendJson(parameters, j);
+        JSON::extendJson(parameters, j);
     }
 
     void Algorithm::printJsonParameters() {

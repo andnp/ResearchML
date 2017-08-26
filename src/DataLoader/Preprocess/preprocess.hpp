@@ -9,7 +9,7 @@ namespace GPUCompute {
 namespace Preprocess {
     void oneHot(const MatrixRef I, Matrix &O);
 
-    class Scaler : public JsonConfig {
+    class Scaler : public JSON::JsonConfig {
         std::vector<Numeric_t> scale_min = {}; // min observation from dataset for each row
         std::vector<Numeric_t> scale_max = {}; // max observation from dataset for each row
         json getDefault() override;

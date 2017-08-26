@@ -26,7 +26,7 @@ namespace MatrixUtil {
     std::vector<int> getDimensions(std::string file);
     void readMatrix(std::string file, Matrix &X);
     void fillWithRandom(Matrix &M);
-    void fillWithRandom(Matrix &M, float mean, float sigma);
+    void fillWithRandom(Matrix &M, Numeric_t mean, Numeric_t sigma);
 
     template<class Func_t>
     Matrix iterateMatrix(MatrixRef M, Func_t f) {
@@ -56,4 +56,5 @@ namespace MatrixUtil {
 
     std::vector<int> colMaxes(const MatrixRef I);
     bool areMatricesEqual(MatrixRef a, MatrixRef b);
+    Matrix getRandomMatrix(int rows, int cols, Numeric_t mean, Numeric_t sigma);
 }}

@@ -57,82 +57,91 @@ void toy() {
     std::cout << Temp << std::endl;
 }
 
-TFNode logisticError(ComputeEngine &CE, TFNode X, TFNode Y, TFNode W) {
-    auto Z = CE.MatMul(W, X);
-    auto S = CE.Sigmoid(Z);
-    auto E = CE.Sub(S, Y);
-    return E;
-}
-
-TFNode gradientGraph(ComputeEngine &CE, TFNode X, TFNode Y, std::vector<TFNode> Parameters, std::vector<int> dims) {
+TFNode gradientGraph(ComputeEngine &CE, TFNode X, TFNode Y, std::vector<TFNode> Parameters, json dims) {
     TFNode W = Parameters[0];
-    int samples = dims[0];
+    int samples = dims["samples"];
     // compute Y - (sig(W * X));
-    auto E = logisticError(CE, X, Y, W);
+    auto E = Loss::logisticError(CE, X, Y, W);
     auto G = CE.Div(CE.MatMul(E, X, MatMul::TransposeB(true)), static_cast<Numeric_t>(samples));
     return CE.Add(CE.Multiply(W, 2.0 * 0.0001), G);
 }
 
-void LR() {
-    const std::string data_path = "~/Projects/research/ml_data/cifar10.csv";
-    Matrix CIFAR;
-    MatrixUtil::readMatrix(data_path, CIFAR);
+TFNode lossGraph(ComputeEngine &CE, TFNode X, TFNode Y, std::vector<TFNode> Parameters, json dims) {
+    TFNode W = Parameters[0];
+    int samples = dims["samples"];
+    auto Yhat = CE.Sigmoid(CE.MatMul(W, X));
+    auto NE = Loss::leastSquaresLoss(CE, Yhat, Y);
+    return CE.Div(NE, static_cast<Numeric_t>(samples));
+}
 
-    Matrix X = CIFAR.block(0, 1, 60000, 1024);
-    Matrix Yindex = CIFAR.block(0, 0, 60000, 1);
-    Matrix Y;
-    Preprocess::oneHot(Yindex, Y);
-
-    const int samples = X.rows();
-    const int features = X.cols();
-    const int classes = Y.cols();
-
-    X.transposeInPlace();
-    Y.transposeInPlace();
-
-    Preprocess::Scaler scaler;
-    scaler.inferRange(X);
-    scaler.scale(X);
-
-    Matrix w(classes, features);
-    MatrixUtil::fillWithRandom(w, 0, 1);
-
+template <class GradientFunc_t, class LossFunc_t>
+void optimizeGradientDescent(MatrixRef X, MatrixRef Y, std::vector<MatrixRef> Parameters, json opt_params, GradientFunc_t getGradient, LossFunc_t getLoss) {
     ComputeEngine CE;
+    int batch_size = opt_params["batch_size"];
+    Numeric_t threshold = opt_params["threshold"];
+    Numeric_t stepsize = opt_params["stepsize"];
+    int samples = X.cols();
 
-    auto WT = CE.getTensorFromMatrix(w);
+    auto data = CE.InputVariables(2);
 
-    auto W = CE.Var(w);
-
-    // auto X_ = CE.InputVariable();
-    // auto Y_ = CE.InputVariable();
-
-    auto X_ = CE.Var(X);
-    auto Y_ = CE.Var(Y);
-
-    // auto shuffled = Optimizer::Util::shuffleTensors(CE, {X_, Y_});
-
-    Optimizer::Util::splitMinibatch(CE, X_, Y_, samples, 100, [&W](auto &CE, auto X, auto Y, int batch_samples) {
-        auto G = gradientGraph(CE, X, Y, {W}, {batch_samples});
-
-        W = CE.AssignSub(W, CE.Multiply(G, 0.01));
+    std::vector<TFNode> P = _::map<MatrixRef, TFNode>(Parameters, [&CE](auto x) {
+        return CE.Var(x);
     });
 
+    auto shuffled = Optimizer::Util::shuffleTensors(CE, data);
+    Optimizer::Util::splitMinibatch(CE, shuffled[0], shuffled[1], samples, batch_size, [&P, stepsize, getGradient](auto &CE, auto X, auto Y, int batch_samples) {
+        json dims = {{"samples", batch_samples}};
+        auto G = getGradient(CE, X, Y, P, dims);
 
-    // auto W_ = CE.Assign(W, NW);
+        P[0] = CE.AssignSub(P[0], CE.Multiply(G, stepsize));
+    });
 
-    auto Yhat = CE.Sigmoid(CE.MatMul(W, X_));
-    auto NE = leastSquaresLoss(CE, Yhat, Y_);
+    auto NE = getLoss(CE, data[0], data[1], P, {{"samples", samples}});
 
-    const int steps = 10000;
-    const int epochs = 1000;
-    for (int s = 0; s < epochs; ++s) {
-        auto outs = CE.run({}, {}, {NE});
-        std::cout << outs[0] / static_cast<Numeric_t>(samples) << std::endl;
+    Numeric_t last_loss = 1e10;
+    Numeric_t loss = 0;
+    while (std::abs(last_loss - loss) > threshold) {
+        last_loss = loss;
+        auto outs = CE.run(data, {X, Y}, {NE});
+        loss = outs[0](0, 0);
+        std::cout << outs[0] << std::endl;
     }
 
-    auto Parameters = CE.run({}, {}, {W});
+    auto p = CE.run(data, {X, Y}, P);
 
-    std::cout << Parameters[0] << std::endl;
+    std::cout << p[0] << std::endl;
+}
+
+void LR() {
+    // auto data = DataLoader::Util::loadDataset({
+    //     {"path", "~/Projects/research/ml_data/cifar10.csv"},
+    // });
+
+    Matrix x(4, 4);
+    Matrix y(1, 4);
+
+    x << 1, 1, 0, 1,
+         0, 0, 1, 1,
+         1, 0, 1, 0,
+         0, 1, 0, 1;
+
+    y << 1, 1, 0, 1;
+
+    std::vector<Matrix> data = {
+        x,  // data matrix
+        y   // target matrix
+    };
+
+    int classes = data[1].rows();
+    int features = data[0].rows();
+
+    Matrix w = MatrixUtil::getRandomMatrix(classes, features, 0, 0.01);
+
+    optimizeGradientDescent(data[0], data[1], {w}, {
+        {"batch_size", 1},
+        {"threshold", 1e-8},
+        {"stepsize", 0.05}
+    }, gradientGraph, lossGraph);
 }
 
 int main() {

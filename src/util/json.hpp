@@ -7,6 +7,7 @@
 namespace GPUCompute {
     using nlohmann::json;
 
+namespace JSON {
     std::string getJsonString(const json &js);
     void extendJson(json &j1, const json &j2);
 
@@ -16,4 +17,4 @@ namespace GPUCompute {
         json config;
         void setConfig(json &j);
     };
-}
+}}

@@ -17,7 +17,7 @@ TEST(Loss, leastSquaresLoss) {
          0, 0, 1;
 
     auto inputs = CE.InputVariables(2);
-    auto l = leastSquaresLoss(CE, inputs[0], inputs[1]);
+    auto l = Loss::leastSquaresLoss(CE, inputs[0], inputs[1]);
     auto outputs = CE.run(inputs, {m, n}, {l});
 
     EXPECT_TRUE(_::isClose(outputs[0](0, 0), 2.0));

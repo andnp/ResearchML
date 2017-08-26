@@ -2,5 +2,7 @@
 #include "ComputeEngine/ComputeEngine.hpp"
 
 namespace GPUCompute {
-    tensorflow::Output leastSquaresLoss(ComputeEngine &CE, Input Yhat, Input Y);
-}
+namespace Loss {
+    TFNode leastSquaresLoss(ComputeEngine &CE, Input Yhat, Input Y);
+    TFNode logisticError(ComputeEngine &CE, TFNode X, TFNode Y, TFNode W);
+}}

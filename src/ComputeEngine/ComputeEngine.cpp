@@ -185,6 +185,10 @@ namespace GPUCompute {
         return tensorflow::ops::Identity(root, a);
     };
 
+    TFNode ComputeEngine::SquaredDifference(Input a, Input b) {
+        return tensorflow::ops::SquaredDifference(root, a, b);
+    };
+
     std::vector<Tensor> ComputeEngine::run(const ClientSession::FeedType& inputs, const std::vector<tensorflow::Output> outputs) {
         InitializeVariables();
         std::vector<Tensor> outs;

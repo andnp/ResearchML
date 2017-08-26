@@ -57,6 +57,7 @@ public:
     TFNode RandomShuffle(Input a, int seed);
     TFNode Identity(Input a);
     TFNode Transpose(Input a);
+    TFNode SquaredDifference(Input a, Input b);
 
     // Higher level interface
     TFNode InputVariable();

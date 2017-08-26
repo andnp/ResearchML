@@ -1,6 +1,7 @@
 #include "json.hpp"
 
 namespace GPUCompute {
+namespace JSON {
     std::string getJsonString(const json &js) {
         std::string out = "";
         for (auto &j : json::iterator_wrapper(js)) {
@@ -31,4 +32,4 @@ namespace GPUCompute {
         extendJson(config, getDefault());
         extendJson(config, j);
     }
-}
+}}
