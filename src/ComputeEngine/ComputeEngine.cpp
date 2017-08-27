@@ -189,6 +189,27 @@ namespace GPUCompute {
         return tensorflow::ops::SquaredDifference(root, a, b);
     };
 
+    TFNode ComputeEngine::Log(Input a) {
+        return tensorflow::ops::Log(root, a);
+    };
+
+    TFNode ComputeEngine::Max(Input a, Input b) {
+        return tensorflow::ops::Maximum(root, a, b);
+    };
+
+    TFNode ComputeEngine::MaxLog(Input a) {
+        return Max(Log(a), -1e8);
+    };
+
+    TFNode ComputeEngine::MatrixSum(Input a) {
+        return Sum(Sum(a, 1), 0);
+    };
+
+    TFNode ComputeEngine::Print(Input a, InputList data, const tensorflow::ops::Print::Attrs &attrs) {
+        return tensorflow::ops::Print(root, a, data, attrs);
+    };
+
+
     std::vector<Tensor> ComputeEngine::run(const ClientSession::FeedType& inputs, const std::vector<tensorflow::Output> outputs) {
         InitializeVariables();
         std::vector<Tensor> outs;

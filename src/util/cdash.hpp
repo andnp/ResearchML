@@ -65,6 +65,22 @@ namespace _ {
     }
 
     template <typename T>
+    T fromBack(const std::vector<T> &v, const int i = 1) {
+        if (i < 1 || v.size() - i < 0) throw "Cannot get index from back of vector";
+        return v[v.size() - i];
+    }
+
+    template <typename T>
+    T last(const std::vector<T> &v) {
+        return fromBack(v, 1);
+    }
+
+    template <typename T>
+    void insertFront(std::vector<T> &v, T x) {
+        v.insert(std::begin(v), x);
+    }
+
+    template <typename T>
     void add(std::vector<T> &v, const T num) {
         for (int i = 0; i < v.size(); ++i)
             v[i] = v[i] + num;

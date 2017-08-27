@@ -57,59 +57,21 @@ void toy() {
     std::cout << Temp << std::endl;
 }
 
-TFNode gradientGraph(ComputeEngine &CE, TFNode X, TFNode Y, std::vector<TFNode> Parameters, json dims) {
+std::vector<TFNode> gradientGraph(ComputeEngine &CE, TFNode X, TFNode Y, std::vector<TFNode> Parameters, json dims) {
     TFNode W = Parameters[0];
     int samples = dims["samples"];
     // compute Y - (sig(W * X));
-    auto E = Loss::logisticError(CE, X, Y, W);
-    auto G = CE.Div(CE.MatMul(E, X, MatMul::TransposeB(true)), static_cast<Numeric_t>(samples));
-    return CE.Add(CE.Multiply(W, 2.0 * 0.0001), G);
+    auto Yhat = CE.Sigmoid(CE.MatMul(W, X));
+    auto E = Loss::leastSquaresLossGradient(CE, Yhat, Y, samples);
+    auto G = CE.MatMul(E, X, MatMul::TransposeB(true));
+    return { CE.Add(CE.Multiply(W, 2.0 * 0.0001), G) };
 }
 
 TFNode lossGraph(ComputeEngine &CE, TFNode X, TFNode Y, std::vector<TFNode> Parameters, json dims) {
     TFNode W = Parameters[0];
     int samples = dims["samples"];
     auto Yhat = CE.Sigmoid(CE.MatMul(W, X));
-    auto NE = Loss::leastSquaresLoss(CE, Yhat, Y);
-    return CE.Div(NE, static_cast<Numeric_t>(samples));
-}
-
-template <class GradientFunc_t, class LossFunc_t>
-void optimizeGradientDescent(MatrixRef X, MatrixRef Y, std::vector<MatrixRef> Parameters, json opt_params, GradientFunc_t getGradient, LossFunc_t getLoss) {
-    ComputeEngine CE;
-    int batch_size = opt_params["batch_size"];
-    Numeric_t threshold = opt_params["threshold"];
-    Numeric_t stepsize = opt_params["stepsize"];
-    int samples = X.cols();
-
-    auto data = CE.InputVariables(2);
-
-    std::vector<TFNode> P = _::map<MatrixRef, TFNode>(Parameters, [&CE](auto x) {
-        return CE.Var(x);
-    });
-
-    auto shuffled = Optimizer::Util::shuffleTensors(CE, data);
-    Optimizer::Util::splitMinibatch(CE, shuffled[0], shuffled[1], samples, batch_size, [&P, stepsize, getGradient](auto &CE, auto X, auto Y, int batch_samples) {
-        json dims = {{"samples", batch_samples}};
-        auto G = getGradient(CE, X, Y, P, dims);
-
-        P[0] = CE.AssignSub(P[0], CE.Multiply(G, stepsize));
-    });
-
-    auto NE = getLoss(CE, data[0], data[1], P, {{"samples", samples}});
-
-    Numeric_t last_loss = 1e10;
-    Numeric_t loss = 0;
-    while (std::abs(last_loss - loss) > threshold) {
-        last_loss = loss;
-        auto outs = CE.run(data, {X, Y}, {NE});
-        loss = outs[0](0, 0);
-        std::cout << outs[0] << std::endl;
-    }
-
-    auto p = CE.run(data, {X, Y}, P);
-
-    std::cout << p[0] << std::endl;
+    return Loss::leastSquaresLoss(CE, Yhat, Y, samples);
 }
 
 void LR() {
@@ -137,7 +99,7 @@ void LR() {
 
     Matrix w = MatrixUtil::getRandomMatrix(classes, features, 0, 0.01);
 
-    optimizeGradientDescent(data[0], data[1], {w}, {
+    Optimizer::optimizeGradientDescent(data[0], data[1], {w}, {
         {"batch_size", 1},
         {"threshold", 1e-8},
         {"stepsize", 0.05}

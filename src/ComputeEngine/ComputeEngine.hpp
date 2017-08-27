@@ -58,6 +58,11 @@ public:
     TFNode Identity(Input a);
     TFNode Transpose(Input a);
     TFNode SquaredDifference(Input a, Input b);
+    TFNode Log(Input a);
+    TFNode Max(Input a, Input b);
+    TFNode MaxLog(Input a);
+    TFNode MatrixSum(Input a);
+    TFNode Print(Input a, InputList data, const tensorflow::ops::Print::Attrs &attrs);
 
     // Higher level interface
     TFNode InputVariable();

@@ -13,6 +13,7 @@
 #include "src/DataLoader/Preprocess/preprocess.hpp"
 #include "src/DataLoader/utils/utils.hpp"
 #include "src/Optimizer/Loss/loss.hpp"
+#include "src/Optimizer/Opimizer.hpp"
 #include "src/Optimizer/utils/utils.hpp"
 #include "src/util/cdash.hpp"
 #include "src/util/Files/files.hpp"
