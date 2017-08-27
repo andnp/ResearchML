@@ -7,7 +7,7 @@
 namespace GPUCompute {
 namespace Optimizer {
     template <class GradientFunc_t, class LossFunc_t>
-    void optimizeGradientDescent(MatrixRef X, MatrixRef Y, std::vector<MatrixRef> Parameters, json opt_params, GradientFunc_t getGradient, LossFunc_t getLoss) {
+    void optimizeGradientDescent(MatrixRef X, MatrixRef Y, std::vector<Matrix> Parameters, json opt_params, GradientFunc_t getGradient, LossFunc_t getLoss) {
         ComputeEngine CE;
         int batch_size = opt_params["batch_size"];
         Numeric_t threshold = opt_params["threshold"];
@@ -16,7 +16,7 @@ namespace Optimizer {
 
         auto data = CE.InputVariables(2);
 
-        std::vector<TFNode> P = _::map<MatrixRef, TFNode>(Parameters, [&CE](auto x) {
+        std::vector<TFNode> P = _::map<Matrix, TFNode>(Parameters, [&CE](auto x) {
             return CE.Var(x);
         });
 
