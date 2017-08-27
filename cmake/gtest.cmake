@@ -1,8 +1,8 @@
 # Add googletest directly to our build. This adds
 # the following targets: gtest, gtest_main, gmock
 # and gmock_main
-add_subdirectory(${CMAKE_BINARY_DIR}/external/googletest-src
-                 ${CMAKE_BINARY_DIR}/external/googletest-build)
+add_subdirectory(${EXTERNAL_DIR}/googletest-src
+                 ${EXTERNAL_DIR}/googletest-build)
 
 # The gtest/gmock targets carry header search path
 # dependencies automatically when using CMake 2.8.11 or

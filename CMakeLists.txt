@@ -6,11 +6,11 @@ set(CMAKE_BUILD_TYPE Release)
 option(BUILD_TESTS "build tests" OFF)
 
 # set variables for external dependencies
-set(EXTERNAL_DIR "${PROJECT_SOURCE_DIR}/external" CACHE PATH "Location where external dependencies will installed")
+set(EXTERNAL_DIR "${CMAKE_CURRENT_LIST_DIR}/external" CACHE PATH "Location where external dependencies will installed")
 mark_as_advanced(EXTERNAL_DIR)
 
 # Add modules
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
 include(cmake/tensorflow.cmake)
 include(cmake/SetCompilerFlags.cmake)
@@ -19,8 +19,12 @@ set(PROJECT_LIBRARIES ${TF_LIBRARIES})
 
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
-set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} /opt/local/lib/ /usr/lib64/nvidia/ /usr/local/cuda/lib64)
-include_directories(src/ ${PROJECT_INCLUDE_DIRS} ${TF_INCLUDE} ${EXTERNAL_DIR})
+set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} /opt/local/lib/ /usr/lib64/nvidia/ /usr/local/cuda/lib64/)
+
+set(INCLUDES ${CMAKE_CURRENT_LIST_DIR}/src/ ${CMAKE_CURRENT_LIST_DIR}/ ${PROJECT_INCLUDE_DIRS} ${TF_INCLUDE} ${EXTERNAL_DIR})
+set(RML_INCLUDES ${INCLUDES} PARENT_SCOPE)
+
+include_directories(${INCLUDES})
 
 add_executable(generate_header generate_header.cpp)
 
