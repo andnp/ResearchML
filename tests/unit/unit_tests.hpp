@@ -5,3 +5,5 @@
 
 #include "Optimizer/Loss.hpp"
 #include "Optimizer/utils.hpp"
+
+#include "utils/cdash.hpp"
