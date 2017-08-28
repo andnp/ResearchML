@@ -3,16 +3,19 @@
 #include "ComputeEngine/matrix.hpp"
 #include "Optimizer/utils/utils.hpp"
 #include "util/json.hpp"
+#include "util/Logger/Logger.hpp"
 
 namespace GPUCompute {
 namespace Optimizer {
     template <class GradientFunc_t, class LossFunc_t>
-    void optimizeGradientDescent(MatrixRef X, MatrixRef Y, std::vector<Matrix> Parameters, json opt_params, GradientFunc_t getGradient, LossFunc_t getLoss) {
+    std::vector<Matrix> optimizeGradientDescent(MatrixRef X, MatrixRef Y, std::vector<Matrix> Parameters, json opt_params, GradientFunc_t getGradient, LossFunc_t getLoss) {
         ComputeEngine CE;
         int batch_size = opt_params["batch_size"];
         Numeric_t threshold = opt_params["threshold"];
         Numeric_t stepsize = opt_params["stepsize"];
         int samples = X.cols();
+
+        if (samples / batch_size > 500) Logger::warn() << "Number of minibatches is quite large. This may cause algorithm to spend unnecessary time creating computational graph." << std::endl;
 
         auto data = CE.InputVariables(2);
 
@@ -38,11 +41,9 @@ namespace Optimizer {
             last_loss = loss;
             auto outs = CE.run(data, {X, Y}, {NE});
             loss = outs[0](0, 0);
-            std::cout << outs[0] << std::endl;
+            Logger::aux("loss.csv") << loss << std::endl;
         }
 
-        auto p = CE.run(data, {X, Y}, P);
-
-        std::cout << p[0] << std::endl;
+        return CE.run(data, {X, Y}, P);
     }
 }}

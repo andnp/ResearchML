@@ -5,7 +5,10 @@
 #include "util/cdash.hpp"
 
 namespace GPUCompute {
+    SupervisedAlgorithm::SupervisedAlgorithm(json &params) : Algorithm(params) {};
+
     Numeric_t SupervisedAlgorithm::evaluationMethod(const Matrix &P, const Matrix &Y) {
+        std::string task = config["task"];
         if (task == "classification") {
             return test_helper(P, Y);
         } else if (task == "regression") {
@@ -17,6 +20,7 @@ namespace GPUCompute {
         return test_helper(P, Y);
     }
 
+    // TODO: Implement cross validation again
     // void SupervisedAlgorithm::optimizeCrossValidation(int each, int K) {
     //     int num_sweeps = Algorithm::getNumberOfSweeps();
     //     float best_value = -1;
@@ -74,7 +78,8 @@ namespace GPUCompute {
     //     // std::cout << step << ", " << average_accuracy_test / static_cast<float>(K) << std::endl;
     // }
 
-    float SupervisedAlgorithm::test_helper(const MatrixRef P, const MatrixRef Y) {
+    // TODO: This needs to be moved to the analysis folder instead
+    Numeric_t SupervisedAlgorithm::test_helper(const MatrixRef P, const MatrixRef Y) {
         const int numsamples = P.cols();
         const int numfeaturesY = Y.rows();
 
@@ -100,13 +105,13 @@ namespace GPUCompute {
             }
         }
 
-        double percent = 0.0;
+        Numeric_t percent = 0.0;
 
         for (int i = 0; i < numsamples; i++) {
             if (targets[i] == results[i]) percent++;
         }
 
-        return percent / static_cast<double> (numsamples);
+        return percent / static_cast<Numeric_t> (numsamples);
     }
 
     int positiveClassCount(const Matrix &Y) {
@@ -117,7 +122,7 @@ namespace GPUCompute {
         return count;
     }
 
-    int falsePositives(const Matrix &P, const Matrix &Y, float prediction_threshold) {
+    int falsePositives(const Matrix &P, const Matrix &Y, Numeric_t prediction_threshold) {
         int count = 0;
         for (int i = 0; i < Y.cols(); ++i) {
             if (Y(0, i) == 0 && P(0, i) > prediction_threshold) {
@@ -127,7 +132,7 @@ namespace GPUCompute {
         return count;
     }
 
-    int truePositives(const Matrix &P, const Matrix &Y, float prediction_threshold) {
+    int truePositives(const Matrix &P, const Matrix &Y, Numeric_t prediction_threshold) {
         int count = 0;
         for (int i = 0; i < Y.cols(); ++i) {
             if (Y(0, i) == 1 && P(0, i) > prediction_threshold) {
@@ -137,6 +142,7 @@ namespace GPUCompute {
         return count;
     }
 
+    // TODO: This needs to be moved to the analysis folder instead
     Matrix SupervisedAlgorithm::computeROC() {
         // const Matrix TestTarget = dat->getTestTargets();
         // Matrix Test = dat->getTestData();
@@ -155,21 +161,17 @@ namespace GPUCompute {
         // return roc;
     }
 
-    float SupervisedAlgorithm::computeAUC(const Matrix &roc) {
+    // TODO: This needs to be moved to the analysis folder instead
+    Numeric_t SupervisedAlgorithm::computeAUC(const Matrix &roc) {
         const int precision = roc.rows() - 1;
-        float sum = 0.0;
+        Numeric_t sum = 0.0;
         for (int i = 0; i < precision; ++i) {
-            const float width = roc(i, 0) - roc(i+1, 0);
-            const float height = (roc(i, 1) + roc(i+1, 1)) / 2.0;
-            const float sliver = width*height;
+            const Numeric_t width = roc(i, 0) - roc(i+1, 0);
+            const Numeric_t height = (roc(i, 1) + roc(i+1, 1)) / 2.0;
+            const Numeric_t sliver = width*height;
             sum += sliver;
         }
         return sum;
-    }
-
-    float SupervisedAlgorithm::loss() {
-        throw std::invalid_argument("Uh oh. You didn't implement this for this algorithm. Silly");
-        return 0.0;
     }
 
     Matrix SupervisedAlgorithm::predict(const Matrix &X) {  // NOLINT(runtime/references)
@@ -177,13 +179,12 @@ namespace GPUCompute {
         return Matrix(0, 0);
     }
 
-    float SupervisedAlgorithm::TrainAccuracy() {
-        throw std::invalid_argument("This doesn't work for this algorithm yet. Sorry!");
+    Numeric_t SupervisedAlgorithm::loss(const MatrixRef X, const MatrixRef Y) {
+        throw std::invalid_argument("loss(X, Y) doesn't work for this algorithm yet. Sorry!");
         return 0.0;
     }
 
-    float SupervisedAlgorithm::loss(const MatrixRef X, const MatrixRef Y) {
-        throw std::invalid_argument("loss(X, Y) doesn't work for this algorithm yet. Sorry!");
-        return 0.0;
+    void SupervisedAlgorithm::optimize(const MatrixRef X, const MatrixRef Y, json opt_params) {
+        throw "optimize has not yet been implemented";
     }
 }

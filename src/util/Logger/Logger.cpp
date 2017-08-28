@@ -71,12 +71,12 @@ Logger &Logger::instance() {
             case Output::file :
                 std::ofstream *outfile;
                 if (Logger::open_files.find(fname) == Logger::open_files.end()) {
-                // not found
-                outfile = new std::ofstream(fname, std::ios::app);
-                Logger::registerFile(fname, outfile);
+                    // not found
+                    outfile = new std::ofstream(fname, std::ios::app);
+                    Logger::registerFile(fname, outfile);
                 } else {
-                // found
-                outfile = Logger::open_files[fname];
+                    // found
+                    outfile = Logger::open_files[fname];
                 }
                 *outfile << str;
         }
@@ -182,7 +182,7 @@ Logger &Logger::instance() {
     Output Logger::log_type = Output::stdout;
     Output Logger::warn_type = Output::stdout;
     Output Logger::info_type = Output::none;
-    Output Logger::aux_type = Output::none;
+    Output Logger::aux_type = Output::stdout;
     int Logger::current_stream = 0;
     std::string Logger::aux_file = "";
     std::string Logger::file = "";

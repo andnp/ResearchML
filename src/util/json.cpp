@@ -32,4 +32,6 @@ namespace JSON {
         extendJson(config, getDefault());
         extendJson(config, j);
     }
+
+    json JsonConfig::getDefault() { return {}; }
 }}

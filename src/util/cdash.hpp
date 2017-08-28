@@ -21,6 +21,18 @@ namespace _ {
         }
         return out;
     }
+
+    template <typename T1, typename T2, typename O, class Func_t>
+    std::vector<O> zip(std::vector<T1> v1, std::vector<T2> v2, Func_t f) {
+        std::vector<O> out = {};
+        for (int i = 0; i < v1.size(); ++i) {
+            out.push_back(
+                f(v1[i], v2[i])
+            );
+        }
+        return out;
+    }
+
     std::vector<std::string> split(const std::string &s, char delim);
 
     template <typename T>
