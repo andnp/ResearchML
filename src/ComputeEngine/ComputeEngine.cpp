@@ -213,6 +213,10 @@ namespace GPUCompute {
         return tensorflow::ops::ApplyGradientDescent(root, w, alpha, grad);
     };
 
+    TFNode ComputeEngine::ApplyAdadelta(Input w, Input EG, Input dW, Input lr, Input rho, Input epsilon, Input grad) {
+        return tensorflow::ops::ApplyAdadelta(root, w, EG, dW, lr, rho, epsilon, grad);
+    };
+
 
     std::vector<Tensor> ComputeEngine::run(const ClientSession::FeedType& inputs, const std::vector<tensorflow::Output> outputs) {
         InitializeVariables();

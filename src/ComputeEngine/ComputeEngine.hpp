@@ -64,6 +64,7 @@ public:
     TFNode MatrixSum(Input a);
     TFNode Print(Input a, InputList data, const tensorflow::ops::Print::Attrs &attrs);
     TFNode ApplyGradientDescent(Input w, Input alpha, Input grad);
+    TFNode ApplyAdadelta(Input w, Input EG, Input dW, Input lr, Input rho, Input epsilon, Input grad);
 
     // Higher level interface
     TFNode InputVariable();

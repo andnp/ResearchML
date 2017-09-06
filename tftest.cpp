@@ -99,10 +99,11 @@ void LR() {
 
     Matrix w = MatrixUtil::getRandomMatrix(classes, features, 0, 0.01);
 
-    Optimizer::optimizeGradientDescent(data[0], data[1], {w}, {
+    Optimizer::optimizeAdadelta(data[0], data[1], {w}, {
         {"batch_size", 1},
         {"threshold", 1e-8},
-        {"stepsize", 0.05}
+        {"rho", 0.95},
+        {"epsilon", 1.0e-8}
     }, gradientGraph, lossGraph);
 }
 
