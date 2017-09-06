@@ -7,6 +7,9 @@
 
 namespace GPUCompute {
 namespace Optimizer {
+    // -------------------
+    // Optimizer Framework
+    // -------------------
     template <class GradientFunc_t, class LossFunc_t>
     std::vector<Matrix> optimizeGradientDescent(MatrixRef X, MatrixRef Y, std::vector<Matrix> Parameters, json opt_params, GradientFunc_t getGradient, LossFunc_t getLoss) {
         ComputeEngine CE;
@@ -29,7 +32,7 @@ namespace Optimizer {
             auto G = getGradient(CE, X, Y, P, dims);
 
             for (int i = 0; i < P.size(); ++i) {
-                P[i] = CE.AssignSub(P[i], CE.Multiply(G[i], stepsize));
+                P[i] = CE.ApplyGradientDescent(P[i], stepsize, G[i]);
             }
         });
 

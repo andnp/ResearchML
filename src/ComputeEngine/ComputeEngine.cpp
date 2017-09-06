@@ -209,6 +209,10 @@ namespace GPUCompute {
         return tensorflow::ops::Print(root, a, data, attrs);
     };
 
+    TFNode ComputeEngine::ApplyGradientDescent(Input w, Input alpha, Input grad) {
+        return tensorflow::ops::ApplyGradientDescent(root, w, alpha, grad);
+    };
+
 
     std::vector<Tensor> ComputeEngine::run(const ClientSession::FeedType& inputs, const std::vector<tensorflow::Output> outputs) {
         InitializeVariables();

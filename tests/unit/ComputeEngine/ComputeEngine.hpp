@@ -290,6 +290,35 @@ TEST(ComputeEngine, Transpose) {
     EXPECT_TRUE(MatrixUtil::areMatricesEqual(o, e));
 }
 
+// ---------------
+// GradientDescent
+// ---------------
+
+TEST(ComputeEngine, GradientDescent) {
+    ComputeEngine CE;
+
+    Matrix w(2, 2);
+    w << 1, 2,
+         3, 4;
+
+    Matrix g(2, 2);
+    g << 0, 1,
+         1, 0;
+
+    Numeric_t alpha = .5;
+    Matrix e = w - alpha * g;
+
+    auto G = CE.InputVariable();
+    auto W = CE.Var(w);  // Note here that we *must* use a var, not an input var (why? I'm not sure..)
+
+    auto update = CE.ApplyGradientDescent(W, alpha, G);
+    auto outputs = CE.run({G}, {g}, {update});
+
+    auto o = outputs[0];
+
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(o, e));
+}
+
 // ---
 // Run
 // ---

@@ -63,6 +63,7 @@ public:
     TFNode MaxLog(Input a);
     TFNode MatrixSum(Input a);
     TFNode Print(Input a, InputList data, const tensorflow::ops::Print::Attrs &attrs);
+    TFNode ApplyGradientDescent(Input w, Input alpha, Input grad);
 
     // Higher level interface
     TFNode InputVariable();
