@@ -20,6 +20,22 @@ namespace Preprocess {
         }
     }
 
+    std::vector<Matrix> split(Matrix &X, int bins, int axis) {
+        Matrix D = axis == 0 ? X : X.transpose();
+        int samples = D.rows();
+        int features = D.cols();
+
+        int bin_sizes = samples / bins;
+        int last_bin = (samples - (bin_sizes * bins)) + bin_sizes;
+
+        std::vector<Matrix> out = {};
+        for (int i = 0; i < bins - 1; ++i) {
+            out.push_back(D.block(i * bin_sizes, 0, bin_sizes, features));
+        }
+        out.push_back(D.block(samples - last_bin, 0, last_bin, features));
+        return out;
+    }
+
     json Scaler::getDefault() {
         return {
             { "min", 0 },  // min after scaling

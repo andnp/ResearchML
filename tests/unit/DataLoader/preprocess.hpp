@@ -58,3 +58,22 @@ TEST(preprocess, Scaler) {
 
     EXPECT_TRUE(MatrixUtil::areMatricesEqual(m, e));
 }
+
+TEST(preprocess, split) {
+    Matrix m(10, 1);
+    for (int i = 0; i < 10; ++i) m(i, 0) = i;
+
+    std::vector<Matrix> expected = {
+        Matrix(3, 1),
+        Matrix(3, 1),
+        Matrix(4, 1)
+    };
+
+    expected[0] << 0, 1, 2;
+    expected[1] << 3, 4, 5;
+    expected[2] << 6, 7, 8, 9;
+
+    std::vector<Matrix> results = Preprocess::split(m, 3);
+
+    for (int i = 0; i < 3; ++i) EXPECT_TRUE(MatrixUtil::areMatricesEqual(results[i], expected[i]));
+}

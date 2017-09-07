@@ -8,6 +8,7 @@
 namespace GPUCompute {
 namespace Preprocess {
     void oneHot(const MatrixRef I, Matrix &O);
+    std::vector<Matrix> split(Matrix &X, int bins, int axis = 0);
 
     class Scaler : public JSON::JsonConfig {
         std::vector<Numeric_t> scale_min = {}; // min observation from dataset for each row
