@@ -93,6 +93,14 @@ namespace _ {
     }
 
     template <typename T>
+    std::vector<T> drop(const std::vector<T> &v, const int i) {
+        std::vector<T> out = {};
+        out.insert(out.end(), v.begin(), v.begin() + i);
+        out.insert(out.end(), v.begin() + (i+1), v.end());
+        return out;
+    }
+
+    template <typename T>
     void add(std::vector<T> &v, const T num) {
         for (int i = 0; i < v.size(); ++i)
             v[i] = v[i] + num;
@@ -101,6 +109,15 @@ namespace _ {
     template <typename T>
     bool isClose(T a, T b) {
         return std::abs(a - b) < 1e-6;
+    }
+
+    template <typename T>
+    bool vectorEqual(std::vector<T> a, std::vector<T> b) {
+        if (a.size() != b.size()) return false;
+        for (int i = 0; i < a.size(); ++i) {
+            if (a[i] != b[i]) return false;
+        }
+        return true;
     }
 }  // namespace _
 }  // namespace GPUCompute

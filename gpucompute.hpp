@@ -10,6 +10,7 @@
 #include "src/analysis/analysis.hpp"
 #include "src/ComputeEngine/ComputeEngine.hpp"
 #include "src/ComputeEngine/matrix.hpp"
+#include "src/DataLoader/DataLoader.hpp"
 #include "src/DataLoader/Preprocess/preprocess.hpp"
 #include "src/DataLoader/utils/utils.hpp"
 #include "src/Optimizer/Loss/loss.hpp"

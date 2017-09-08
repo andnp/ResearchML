@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
 #include "gpucompute.hpp"
+using namespace GPUCompute;
 
 TEST(matrix, iterateMatrix) {
-    using namespace GPUCompute;
     Matrix m(4, 2);
     m <<    1, 2,
             3, 4,
@@ -16,7 +16,6 @@ TEST(matrix, iterateMatrix) {
 }
 
 TEST(matrix, zipMatrices) {
-    using namespace GPUCompute;
     Matrix m(2, 2);
     Matrix n(2, 2);
 
@@ -34,7 +33,6 @@ TEST(matrix, zipMatrices) {
 }
 
 TEST(matrix, fillWithRandom) {
-    using namespace GPUCompute;
     Matrix m = Matrix::Zero(10, 10);
     Matrix n = Matrix::Zero(10, 10);
 
@@ -45,4 +43,21 @@ TEST(matrix, fillWithRandom) {
         EXPECT_NE(v1, v2);
         return 0;
     });
+}
+
+TEST(matrix, stackCols) {
+    Matrix m(2, 2);
+    Matrix n(2, 2);
+    Matrix e(2, 4);
+    m << 1, 2,
+         5, 6;
+    n << 3, 4,
+         7, 8;
+
+    e << 1, 2, 3, 4,
+         5, 6, 7, 8;
+
+    auto o = MatrixUtil::stackCols({m, n});
+    std::cout << o << std::endl;
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(e, o));
 }

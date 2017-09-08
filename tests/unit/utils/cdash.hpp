@@ -119,3 +119,13 @@ TEST(cdash, isClose) {
     EXPECT_TRUE(_::isClose(x, z));
     EXPECT_FALSE(_::isClose(x, y));
 }
+
+// we should be able to drop an element from a std::vector
+TEST(cdash, drop) {
+    std::vector<int> m = {1, 2, 3, 4, 5};
+    EXPECT_TRUE(_::vectorEqual(_::drop(m, 0), {2, 3, 4, 5}));
+    EXPECT_TRUE(_::vectorEqual(_::drop(m, 1), {1, 3, 4, 5}));
+    EXPECT_TRUE(_::vectorEqual(_::drop(m, 2), {1, 2, 4, 5}));
+    EXPECT_TRUE(_::vectorEqual(_::drop(m, 3), {1, 2, 3, 5}));
+    EXPECT_TRUE(_::vectorEqual(_::drop(m, 4), {1, 2, 3, 4}));
+}

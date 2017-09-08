@@ -27,7 +27,7 @@ namespace Optimizer {
         int max_steps = opt_params["max_steps"];
         int samples = X.cols();
 
-        if (samples / batch_size > 500) Logger::warn() << "Number of minibatches is quite large. This may cause algorithm to spend unnecessary time creating computational graph." << std::endl;
+        if (samples / batch_size > 1000) Logger::warn() << "Number of minibatches is quite large. This may cause algorithm to spend unnecessary time creating computational graph." << std::endl;
 
         auto data = CE.InputVariables(2);
 

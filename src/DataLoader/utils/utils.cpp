@@ -1,5 +1,6 @@
 #include "utils.hpp"
 #include <string>
+#include "util/cdash.hpp"
 
 namespace GPUCompute {
 namespace DataLoader {
@@ -15,7 +16,7 @@ namespace Util {
         return defaults;
     }
 
-    std::vector<Matrix> loadDataset(json user_options) {
+    SupervisedData loadDataset(json user_options) {
         json options = getLoaderDefaults(user_options);
         std::string filepath = options["path"];
         bool use_one_hot = options["one_hot"];
@@ -55,5 +56,31 @@ namespace Util {
         }
 
         return {X, Y};
+    }
+
+    std::vector<SupervisedData> getTestTrain(MatrixRef X, MatrixRef Y, int train, int test) {
+        Matrix x = X.block(0, 0, X.rows(), train);
+        Matrix y = Y.block(0, 0, Y.rows(), train);
+        Matrix t = X.block(train, 0, X.rows(), test);
+        Matrix tt = Y.block(train, 0, Y.rows(), test);
+
+        return {{x, y}, {t, tt}};
+    }
+
+    std::vector<SupervisedData> getKFoldCV(Matrix &X, Matrix &Y, int k, int fold) {
+        auto x_bins = Preprocess::split(X, k, 1);
+        auto y_bins = Preprocess::split(Y, k, 1);
+
+        auto x_dropped = _::drop(x_bins, fold);
+        auto y_dropped = _::drop(y_bins, fold);
+
+        auto x_fold = x_bins[fold];
+        auto y_fold = y_bins[fold];
+
+        auto train = SupervisedData(MatrixUtil::stackCols(x_dropped), MatrixUtil::stackCols(y_dropped));
+
+        auto test = SupervisedData(x_fold, y_fold);
+
+        return {train, test};
     }
 }}}
