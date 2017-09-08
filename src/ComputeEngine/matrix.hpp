@@ -54,6 +54,19 @@ namespace MatrixUtil {
         return o;
     }
 
+    inline Matrix stackCols(std::vector<Matrix> v) {
+        int total_cols = 0;
+        for (int i = 0; i < v.size(); ++i) total_cols += v[i].cols();
+
+        int seen = 0;
+        Matrix out(v[0].rows(), total_cols);
+        for (int i = 0; i < v.size(); ++i) {
+            out.block(0, seen, v[i].rows(), v[i].cols()) = v[i];
+            seen += v[i].cols();
+        }
+        return out;
+    }
+
     std::vector<int> colMaxes(const MatrixRef I);
     bool areMatricesEqual(MatrixRef a, MatrixRef b);
     Matrix getRandomMatrix(int rows, int cols, Numeric_t mean, Numeric_t sigma);
