@@ -20,7 +20,8 @@ namespace Preprocess {
         }
     }
 
-    std::vector<Matrix> split(Matrix &X, int bins, int axis) {
+    std::vector<Matrix> split(MatrixRef X, int bins, int axis) {
+        // Align matrix so it is rowMajor at start
         Matrix D = axis == 0 ? X : X.transpose();
         int samples = D.rows();
         int features = D.cols();
@@ -33,7 +34,11 @@ namespace Preprocess {
             out.push_back(D.block(i * bin_sizes, 0, bin_sizes, features));
         }
         out.push_back(D.block(samples - last_bin, 0, last_bin, features));
-        return out;
+
+        // Realign matrix back to original orientation before returning
+        return _::map<Matrix, Matrix>(out, [axis](MatrixRef m) {
+            return axis == 0 ? m : m.transpose();
+        });
     }
 
     json Scaler::getDefault() {
