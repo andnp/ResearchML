@@ -36,6 +36,6 @@ namespace Loss {
     }
 
     TFNode l2Norm(ComputeEngine &CE, TFNode X, int samples) {
-        return CE.Div(CE.MatrixSum(CE.Multiply(W, W)), static_cast<Numeric_t>(samples));
+        return CE.Div(CE.MatrixSum(CE.Multiply(X, X)), static_cast<Numeric_t>(samples));
     }
 }}

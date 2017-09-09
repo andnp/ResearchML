@@ -31,6 +31,7 @@ namespace GPUCompute {
         friend Logger& operator<<(Logger&, std::ostream& (*os)(std::ostream&));
         friend void message(Output dest, std::string str, std::string file);
 
+        static std::map<std::string, Output> stringToOutput;
     private:
         static void registerFile(std::string file, std::ofstream* outfile);
         static std::string file;

@@ -188,5 +188,6 @@ Logger &Logger::instance() {
     std::string Logger::file = "";
     int Logger::MAX_OPEN_FILES = 25;
     std::map<std::string, std::ofstream*> Logger::open_files = {};
+    std::map<std::string, Output> Logger::stringToOutput = {{"file", Output::file}, {"console", Output::stdout}};
 }
 

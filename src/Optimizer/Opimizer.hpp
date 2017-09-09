@@ -97,4 +97,12 @@ namespace Optimizer {
             return CE.ApplyAdadelta(P, EG[i], dW[i], 1.0, rho, epsilon, G);
         });
     };
+
+    template <class GradientFunc_t, class LossFunc_t>
+    std::vector<Matrix> optimize(MatrixRef X, MatrixRef Y, std::vector<Matrix> Parameters, json opt_params, GradientFunc_t getGradient, LossFunc_t getLoss) {
+        std::string optimizer = opt_params["optimizer"];
+        if (optimizer == "gradient_descent") return optimizeGradientDescent(X, Y, Parameters, opt_params, getGradient, getLoss);
+        else if (optimizer == "adadelta") return optimizeAdadelta(X, Y, Parameters, opt_params, getGradient, getLoss);
+        else throw "Don't recognize this optimizer";
+    }
 }}
