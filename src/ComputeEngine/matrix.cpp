@@ -14,7 +14,7 @@ namespace MatrixUtil {
         int col = 0;
         int row = 0;
         std::ifstream indata;
-        indata.open(getPath(file));
+        indata.open(Util::Files::getPath(file));
 
         std::string line;
         while (std::getline(indata, line)) {
@@ -32,7 +32,7 @@ namespace MatrixUtil {
     }
 
     void readMatrix(std::string file, Matrix &X) {
-        file = getPath(file);
+        file = Util::Files::getPath(file);
         std::vector<int> dims = getDimensions(file);
         const int rows = dims[0];
         const int cols = dims[1];

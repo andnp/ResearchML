@@ -6,6 +6,8 @@
 #include "util/cdash.hpp"
 
 namespace GPUCompute {
+namespace Util {
+namespace Files {
     std::string getPath(std::string str) {
         wordexp_t exp_results;
         wordexp(str.c_str(), &exp_results, 0);
@@ -29,4 +31,4 @@ namespace GPUCompute {
             std::system(cmd.c_str());
         }
     }
-}
+}}}

@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include "json/src/json.hpp"
 
 // Very thin wrapper around json lib.
@@ -10,6 +11,7 @@ namespace GPUCompute {
 namespace JSON {
     std::string getJsonString(const json &js);
     void extendJson(json &j1, const json &j2);
+    json readFile(std::string path);
 
     class JsonConfig {
         virtual json getDefault();

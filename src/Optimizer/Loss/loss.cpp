@@ -34,4 +34,8 @@ namespace Loss {
     TFNode sigmoidGradient(ComputeEngine &CE, TFNode X) {
         return CE.Multiply(X, CE.Sub(1.0, X));
     }
+
+    TFNode l2Norm(ComputeEngine &CE, TFNode X, int samples) {
+        return CE.Div(CE.MatrixSum(CE.Multiply(W, W)), static_cast<Numeric_t>(samples));
+    }
 }}

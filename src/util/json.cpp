@@ -1,3 +1,4 @@
+#include <fstream>
 #include "json.hpp"
 
 namespace GPUCompute {
@@ -25,6 +26,14 @@ namespace JSON {
         for (const auto &j : json::iterator_wrapper(j2)) {
             j1[j.key()] = j.value();
         }
+    }
+
+    json readFile(std::string path) {
+        std::ifstream f(path);
+        json j;
+        j << f;
+        f.close();
+        return j;
     }
 
     void JsonConfig::setConfig(json &j) {

@@ -9,4 +9,5 @@ namespace Loss {
     TFNode gradientCrossEntropy(ComputeEngine &CE, TFNode Yhat, TFNode Y, int samples);
 
     TFNode sigmoidGradient(ComputeEngine &CE, TFNode X);
+    TFNode l2Norm(ComputeEngine &CE, TFNode X, int samples = 1);
 }}

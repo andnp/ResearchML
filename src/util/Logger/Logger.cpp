@@ -96,22 +96,22 @@ Logger &Logger::instance() {
     }
     void Logger::setWarn(Output dest) {
         if (dest == Output::file)
-            createFile(file);
+            Util::Files::createFile(file);
         warn_type = dest;
     }
     void Logger::setLog(Output dest) {
         if (dest == Output::file)
-            createFile(file);
+            Util::Files::createFile(file);
         log_type = dest;
     }
     void Logger::setInfo(Output dest) {
         if (dest == Output::file)
-            createFile(file);
+            Util::Files::createFile(file);
         info_type = dest;
     }
     void Logger::setAux(Output dest) {
         if (dest == Output::file)
-            createFile(file);
+            Util::Files::createFile(file);
         aux_type = dest;
     }
     void Logger::setFilepath(std::string str) {
