@@ -118,6 +118,7 @@ Logger &Logger::instance() {
         file = str;
     }
     void Logger::addFilepath(std::string str) {
+        if (file.back() != '/') file += "/";
         file += str;
     }
     // int Logger::currentStream() {

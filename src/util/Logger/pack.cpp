@@ -64,7 +64,7 @@ static void addPath(json js, std::string root, const Experiment &e) {
             Util::Files::createFile(path);
             addPath(j.value(), path, e);
             if (j.key() == "_results_") {
-                Logger::setFilepath(path);
+                Logger::addFilepath(path);
             }
         }
     }

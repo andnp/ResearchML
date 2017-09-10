@@ -22,6 +22,8 @@ namespace Optimizer {
     template <class GradientFunc_t, class LossFunc_t, class OptFunc_t>
     std::vector<Matrix> optimize(ComputeEngine &CE, MatrixRef X, MatrixRef Y, std::vector<Matrix> Parameters, json opt_params, GradientFunc_t getGradient, LossFunc_t getLoss, OptFunc_t opt) {
         opt_params = mergeDefault(opt_params);
+
+        int features = X.rows();
         int batch_size = opt_params["batch_size"];
         Numeric_t threshold = opt_params["threshold"];
         int max_steps = opt_params["max_steps"];
@@ -36,8 +38,8 @@ namespace Optimizer {
         });
 
         auto shuffled = Optimizer::Util::shuffleTensors(CE, data);
-        Optimizer::Util::splitMinibatch(CE, shuffled[0], shuffled[1], samples, batch_size, [&P, getGradient, opt](auto &CE, auto X, auto Y, int batch_samples) {
-            json dims = {{"samples", batch_samples}};
+        Optimizer::Util::splitMinibatch(CE, shuffled[0], shuffled[1], samples, batch_size, [&P, features, getGradient, opt](auto &CE, auto X, auto Y, int batch_samples) {
+            json dims = {{"samples", batch_samples}, {"features", features}};
             auto G = getGradient(CE, X, Y, P, dims);
 
             for (int i = 0; i < P.size(); ++i) {
@@ -46,7 +48,7 @@ namespace Optimizer {
             }
         });
 
-        auto NE = getLoss(CE, data[0], data[1], P, {{"samples", samples}});
+        auto NE = getLoss(CE, data[0], data[1], P, {{"samples", samples}, {"features", features}});
 
         Numeric_t last_loss = 1e10;
         Numeric_t loss = 0;
