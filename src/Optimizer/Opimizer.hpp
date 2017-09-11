@@ -67,7 +67,7 @@ namespace Optimizer {
 
             // if sqrt(step) is an integer, then scale up the windowed average
             // this helps smooth out the threshold checking after many epochs
-            if (std::sqrt(static_cast<Numeric_t>(step)) == static_cast<int>(std::sqrt(step))) losses.push_back(10);
+            if (std::sqrt(static_cast<Numeric_t>(step)) == static_cast<int>(std::sqrt(step))) losses.push_back(_::mean(losses));
             step++;
         }
 
