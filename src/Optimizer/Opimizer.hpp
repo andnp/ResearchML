@@ -51,7 +51,7 @@ namespace Optimizer {
         auto NE = getLoss(CE, data[0], data[1], P, {{"samples", samples}, {"features", features}});
 
         int step = 0;
-        std::vector<Numeric_t> losses(10, 10);
+        std::vector<Numeric_t> losses(5, 10);
         Numeric_t last_loss = 0;
         Numeric_t loss = 0;
         while (std::abs(_::mean(losses)) > threshold &&
@@ -64,6 +64,10 @@ namespace Optimizer {
             losses.pop_back();
             std::cout << step << ", " << loss << ", " << _::mean(losses) << std::endl;
             Logger::aux("loss.csv") << loss << std::endl;
+
+            // if sqrt(step) is an integer, then scale up the windowed average
+            // this helps smooth out the threshold checking after many epochs
+            if (std::sqrt(static_cast<Numeric_t>(step)) == static_cast<int>(std::sqrt(step))) losses.push_back(10);
             step++;
         }
 
