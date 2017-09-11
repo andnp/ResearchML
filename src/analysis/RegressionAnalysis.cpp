@@ -2,6 +2,7 @@
 #include <vector>
 
 namespace GPUCompute {
+namespace Analysis {
     Numeric_t RMSE(const Matrix &P, const Matrix &Y) {
         const Numeric_t samples = static_cast<Numeric_t>(P.cols());
         const Numeric_t classes = static_cast<Numeric_t>(P.rows());
@@ -66,5 +67,5 @@ namespace GPUCompute {
         }
         return mape;
     }
-}
+}}
 

@@ -2,6 +2,7 @@
 #include <vector>
 
 namespace GPUCompute {
+namespace Analysis {
     std::vector<Numeric_t> MultiClassClassificationError(const Matrix &P, const Matrix &Y) {
         int classes = Y.rows();
         auto thresh_f = [](Numeric_t x) {
@@ -59,4 +60,4 @@ namespace GPUCompute {
 
         return 1.0 - (percent / static_cast<Numeric_t> (numsamples));
     }
-}
+}}

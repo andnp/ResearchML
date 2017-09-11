@@ -1,6 +1,7 @@
 #include "analysis.hpp"
 
 namespace GPUCompute {
+namespace Analysis {
     Matrix generateConfusionMatrix(const Matrix &P, const Matrix &Y) {
         const int classes = P.rows() == 1 ? 2 : P.rows();
         const int samples = P.cols();
@@ -22,4 +23,4 @@ namespace GPUCompute {
         }
         return cf;
     }
-}
+}}
