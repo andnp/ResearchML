@@ -80,11 +80,24 @@ TEST(cdash, fromBack) {
     EXPECT_TRUE(first == 1);
 }
 
+TEST(cdash, fromBack_returnReference) {
+    std::vector<int> m = {1, 2, 3, 4, 5};
+    _::fromBack(m, 1) = 6;
+    EXPECT_EQ(m[4], 6);
+}
+
 // we should be able to get the last element from a std::vector
 TEST(cdash, last) {
     std::vector<int> m = {1, 2, 3, 4, 5};
     auto last = _::last(m);
     EXPECT_TRUE(last == 5);
+}
+
+// we should be able to modify the original vector
+TEST(cdash, last_returnReference) {
+    std::vector<int> m = {1, 2, 3, 4, 5};
+    _::last(m) = 6;
+    EXPECT_EQ(m[4], 6);
 }
 
 // we should be able to insert at the front of a std::vector

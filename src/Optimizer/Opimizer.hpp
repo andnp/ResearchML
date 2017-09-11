@@ -10,6 +10,7 @@ namespace Optimizer {
     inline json mergeDefault(json &j) {
         json config = {};
         JSON::extendJson(config, {
+            {"batch_size", 1},
             {"threshold", 1.0e-6},
             {"max_steps", -1}
         });
@@ -44,21 +45,24 @@ namespace Optimizer {
 
             for (int i = 0; i < P.size(); ++i) {
                 P[i] = opt(P[i], G[i], i);
-                // P[i] = CE.ApplyGradientDescent(P[i], stepsize, G[i]);
             }
         });
 
         auto NE = getLoss(CE, data[0], data[1], P, {{"samples", samples}, {"features", features}});
 
-        Numeric_t last_loss = 1e10;
-        Numeric_t loss = 0;
         int step = 0;
-        while (std::abs(last_loss - loss) > threshold &&
+        std::vector<Numeric_t> losses(10, 10);
+        Numeric_t last_loss = 0;
+        Numeric_t loss = 0;
+        while (std::abs(_::mean(losses)) > threshold &&
               (max_steps > -1 && step < max_steps)
         ) {
             last_loss = loss;
             auto outs = CE.run(data, {X, Y}, {NE});
             loss = outs[0](0, 0);
+            _::insertFront(losses, last_loss - loss);
+            losses.pop_back();
+            std::cout << step << ", " << loss << ", " << _::mean(losses) << std::endl;
             Logger::aux("loss.csv") << loss << std::endl;
             step++;
         }

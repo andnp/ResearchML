@@ -8,4 +8,7 @@ class Experiment : public JSON::JsonConfig {
     int index = -1;
     inline Experiment(json &j) { setConfig(j); }
 };
-}
+
+namespace ExperimentParser {
+    json getParameters(json &e, int i);
+}}
