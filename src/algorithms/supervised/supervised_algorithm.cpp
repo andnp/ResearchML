@@ -12,71 +12,13 @@ namespace GPUCompute {
         if (task == "classification") {
             return test_helper(P, Y);
         } else if (task == "regression") {
-            std::vector<Numeric_t> mse = MSE(P, Y);
+            std::vector<Numeric_t> mse = Analysis::MSE(P, Y);
             return _::mean(mse);
         } else if (task == "multitask_classification") {
-            return 1.0 - ClassificationError(P, Y);
+            return 1.0 - Analysis::ClassificationError(P, Y);
         }
         return test_helper(P, Y);
     }
-
-    // TODO: Implement cross validation again
-    // void SupervisedAlgorithm::optimizeCrossValidation(int each, int K) {
-    //     int num_sweeps = Algorithm::getNumberOfSweeps();
-    //     float best_value = -1;
-    //     int best_settings = -1;
-    //     Algorithm::dat->createKFoldCV(K);
-    //     for (int i = 0; i < num_sweeps; ++i) {
-    //         float average_accuracy_test = 0.0;
-    //         setSweepParameters(i);
-    //         for (int k = 0; k < K; ++k) {
-    //             Algorithm::dat->setNthTrainingSet(k);
-    //             setup();
-    //             reset();
-    //             optimizeBatch(Algorithm::dat->getTrainingData().rows(), each);
-    //             Matrix X = Algorithm::dat->getValidationData();
-    //             Matrix P = predict(X);
-    //             average_accuracy_test += evaluationMethod(P, Algorithm::dat->getValidationTargets());
-    //             // printProgress(static_cast<float>(++complete)/static_cast<float>(K * num_sweeps));
-    //         }
-    //         if (average_accuracy_test > best_value) {
-    //             best_value = average_accuracy_test;
-    //             best_settings = i;
-    //         }
-    //     }
-    //     Algorithm::dat->deleteCV();
-    //     setup();
-    //     reset();
-    //     setSweepParameters(best_settings);
-    //     Algorithm::optimizeRamp(Algorithm::dat->getTrainingData().rows(), each);
-    //     average_test = test();
-    //     average_train = TrainAccuracy();
-    // }
-
-    // void SupervisedAlgorithm::optimizeCrossValidationStep(int each, int K, int minibatch, int step) {
-    //     Algorithm::dat->createKFoldCV(K);
-    //     float average_accuracy_test = 0.0;
-    //     float average_accuracy_train = 0.0;
-    //     setSweepParameters(step);
-    //     for (int k = 0; k < K; ++k) {
-    //         Algorithm::dat->setNthTrainingSet(k);
-    //         setup();
-    //         reset();
-    //         optimizeBatch(minibatch, each);
-    //         Matrix X = Algorithm::dat->getValidationData();
-    //         Matrix P = predict(X);
-    //         average_accuracy_test += evaluationMethod(P, Algorithm::dat->getValidationTargets());
-    //         // printProgress(static_cast<float>(k+1)/static_cast<float>(K));
-
-    //         X = Algorithm::dat->getTrainingData();
-    //         P = predict(X);
-    //         average_accuracy_train += evaluationMethod(P, Algorithm::dat->getTrainingTargets());
-    //     }
-    //     Algorithm::dat->deleteCV();
-    //     average_test = average_accuracy_test / static_cast<float>(K);
-    //     average_train = average_accuracy_train / static_cast<float>(K);
-    //     // std::cout << step << ", " << average_accuracy_test / static_cast<float>(K) << std::endl;
-    // }
 
     // TODO: This needs to be moved to the analysis folder instead
     Numeric_t SupervisedAlgorithm::test_helper(const MatrixRef P, const MatrixRef Y) {
