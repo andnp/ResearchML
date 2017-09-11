@@ -4,7 +4,7 @@
 namespace GPUCompute {
 int numParameters(json exp) {
     int num = 1;
-    json sweeps = exp["parameters"];
+    json sweeps = exp;
     for (const auto& j : json::iterator_wrapper(sweeps)) {
         num *= sweeps[j.key()].size();
     }
@@ -17,9 +17,9 @@ namespace ExperimentParser {
         JSON::extendJson(output, e);
 
         int accum = 1;
-        for (json::iterator it = e["parameters"].begin(); it != e["parameters"].end(); ++it) {
+        for (json::iterator it = e.begin(); it != e.end(); ++it) {
             const int num = (it.value()).size();
-            output["parameters"][it.key()] = (it.value())[(index / accum) % num];
+            output[it.key()] = (it.value())[(index / accum) % num];
             accum *= num;
         }
 

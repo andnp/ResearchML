@@ -55,6 +55,18 @@ namespace _ {
         return str;
     }
 
+    inline
+    bool contains(std::string str, std::string piece) {
+        return str.find(piece) != std::string::npos;
+    }
+
+    template <typename T>
+    bool in(std::vector<T> &v, T value) {
+        for (int i = 0; i < v.size(); ++i)
+            if (v[i] == value) return true;
+        return false;
+    }
+
     template <typename T>
     T mean(std::vector<T> &v) {
         const int s = v.size();

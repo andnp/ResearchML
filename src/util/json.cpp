@@ -1,5 +1,6 @@
 #include <fstream>
 #include "json.hpp"
+#include "util/cdash.hpp"
 
 namespace GPUCompute {
 namespace JSON {
@@ -23,9 +24,17 @@ namespace JSON {
     }
 
     void extendJson(json &j1, const json &j2) {
-        for (const auto &j : json::iterator_wrapper(j2)) {
-            j1[j.key()] = j.value();
-        }
+        forEach(j2, [&j1](auto key, auto value) {
+            j1[key] = value;
+        });
+    }
+
+    json without(const json j, std::vector<std::string> keys) {
+        json nj = {};
+        forEach(j, [&nj, &keys](auto key, auto value) {
+            if (!_::in(keys, key)) nj[key] = value;
+        });
+        return nj;
     }
 
     json readFile(std::string path) {

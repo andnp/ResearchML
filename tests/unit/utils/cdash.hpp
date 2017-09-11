@@ -142,3 +142,15 @@ TEST(cdash, drop) {
     EXPECT_TRUE(_::vectorEqual(_::drop(m, 3), {1, 2, 3, 5}));
     EXPECT_TRUE(_::vectorEqual(_::drop(m, 4), {1, 2, 3, 4}));
 }
+
+TEST(cdash, in) {
+    std::vector<int> v = {1, 2, 3, 4, 5};
+    EXPECT_TRUE(_::in(v, 1));
+    EXPECT_FALSE(_::in(v, 6));
+}
+
+TEST(cdash, contains) {
+    std::string str = "hi there friend";
+    EXPECT_TRUE(_::contains(str, " th"));
+    EXPECT_FALSE(_::contains(str, " their"));
+}
