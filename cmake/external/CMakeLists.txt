@@ -40,7 +40,7 @@ ExternalProject_Add(json
 
 ExternalProject_Add(tensorflow
     GIT_REPOSITORY    https://github.com/tensorflow/tensorflow.git
-    GIT_TAG           v1.3.0-rc0
+    GIT_TAG           v1.3.0
     SOURCE_DIR        "${EXTERNAL_DIR}/tensorflow"
     CONFIGURE_COMMAND bash configure_tf.sh ${EXTERNAL_DIR}/tensorflow
     BUILD_COMMAND     bash install_tf.sh ${EXTERNAL_DIR}/tensorflow
