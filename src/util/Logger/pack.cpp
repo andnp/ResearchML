@@ -1,5 +1,6 @@
 #include "pack.hpp"
 #include <fstream>
+#include <unordered_map>
 
 #include "util/json.hpp"
 #include "util/cdash.hpp"
@@ -27,16 +28,13 @@ static std::string parseInterpolations(std::string file, const Experiment &e) {
     } else if (file == "_results_") {
         return "results/run-" + std::to_string(e.index);
     } else if (file == "_parameters_") {
-        std::string headers = csvHeader(e.config["parameters"]);
-        std::string values = JSON::getJsonString(e.config["parameters"]);
-        auto h_split = _::split(headers.substr(0, headers.length() - 2), ',');
-        auto v_split = _::split(values.substr(0, values.length() - 2), ',');
+        std::hash<std::string> hasher;
+        json flattened = e.config["parameters"].flatten();
         std::string out = "";
-        for (int i = 0; i < h_split.size(); ++i) {
-            out += _::replaceAll(h_split[i], " ", "") + "-" +
-                   _::replaceAll(v_split[i], " ", "") + "_";
-        }
-        return out.substr(0, out.length() - 1);
+        JSON::forEach(flattened, [&out](auto key, auto value) {
+            out += _::replaceAll(key, "/", "") + "-" + _::replaceAll(JSON::getJsonString(value), ", ", "") + "_";
+        });
+        return std::to_string(hasher(out.substr(0, out.length() - 2)));
     } else {
         return file;
     }
