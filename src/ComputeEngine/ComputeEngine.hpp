@@ -30,6 +30,8 @@ class ComputeEngine {
     Scope getSubScope(std::string scope);
 
 public:
+    static bool FORCE_CPU;
+    ComputeEngine();
     Matrix getMatrixFromTensor(tensorflow::Tensor &t);
     Tensor getTensorFromMatrix(const Matrix &M1);
     Scope getScope();

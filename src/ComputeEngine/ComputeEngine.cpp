@@ -244,4 +244,12 @@ namespace GPUCompute {
 
         return out_mats;
     }
+
+    bool ComputeEngine::FORCE_CPU = false;
+    ComputeEngine::ComputeEngine() {
+        if (FORCE_CPU) {
+            this->root = (Scope::NewRootScope()).WithDevice("/cpu:0");
+            this->session = new ClientSession(this->root);
+        }
+    }
 };
