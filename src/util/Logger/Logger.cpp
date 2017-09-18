@@ -17,21 +17,21 @@ namespace GPUCompute {
         std::string out = "";
         for (const auto &j : json::iterator_wrapper(js)) {
             if (j.value().is_object()) {
-            // This only goes one level deep. Need to replace with recursive function
-            // in the future.
-            for (const auto &j2 : json::iterator_wrapper(j.value())) {
-                out += j2.key() + ", ";
-            }
+                // This only goes one level deep. Need to replace with recursive function
+                // in the future.
+                for (const auto &j2 : json::iterator_wrapper(j.value())) {
+                    out += j2.key() + ", ";
+                }
             } else {
-            out += j.key() + ", ";
+                out += j.key() + ", ";
             }
         }
         return out;
     }
 
-Logger &Logger::instance() {
-  static Logger l;
-  return l;
+    Logger &Logger::instance() {
+        static Logger l;
+        return l;
     }
 
     Logger& Logger::out() {
@@ -115,10 +115,12 @@ Logger &Logger::instance() {
         aux_type = dest;
     }
     void Logger::setFilepath(std::string str) {
+        if (str.back() != '/') str += "/";
         file = str;
     }
     void Logger::addFilepath(std::string str) {
         if (file.back() != '/') file += "/";
+        if (str.back() != '/') str += "/";
         file += str;
     }
     // int Logger::currentStream() {
@@ -166,12 +168,12 @@ Logger &Logger::instance() {
                     fname = Logger::getFilepath() + Logger::aux_file;
                 }
                 if (Logger::open_files.find(fname) == Logger::open_files.end()) {
-                // not found
-                outfile = new std::ofstream(fname, std::ios::app);
-                Logger::registerFile(fname, outfile);
+                    // not found
+                    outfile = new std::ofstream(fname, std::ios::app);
+                    Logger::registerFile(fname, outfile);
                 } else {
-                // found
-                outfile = Logger::open_files[fname];
+                    // found
+                    outfile = Logger::open_files[fname];
                 }
                 *outfile << std::endl;
                 break;

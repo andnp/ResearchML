@@ -72,7 +72,7 @@ void pack(const Experiment &e) {
     json lib_settings = JSON::readFile("../lib_settings.json");
 
     if (!lib_settings["manifest"].is_null()) {
-        addPath(lib_settings["manifest"], "", e);
+        addPath(lib_settings["manifest"], Logger::getFilepath(), e);
     }
 }
 }};  // namespace Packer
