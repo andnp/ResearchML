@@ -1,25 +1,27 @@
 #include <dirent.h>
 #include <stdio.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
-#include <sstream>
 
 void getAllFiles(std::string root, std::string path, std::vector<std::string> &vec) {  // NOLINT
     DIR *dir = opendir((root + path).c_str());
-    // std::cout << root << ", " << path << std::endl;
 
     struct dirent *entry = readdir(dir);
-
     while (entry != NULL) {
-        if (entry->d_type == DT_DIR) {
-            std::string str(entry->d_name);
+        struct stat entrystat;
+        std::string str(entry->d_name);
+        stat((root+path+"/"+str).c_str(), &entrystat);
+        if (S_ISDIR(entrystat.st_mode)) {
             if (str != "." && str != ".." && str != "libs" && str != "tests" && str != ".git" && str != "build" && str != "external") {
                 getAllFiles(root, path + "/" + str, vec);
             }
         } else {
-            std::string str(entry->d_name);
             if (str.size() > 4 && str.substr(str.size() - 4) == ".hpp" && path != "") {
                 // printf("%s\n", entry->d_name);
                 vec.push_back(path + "/" + str);
