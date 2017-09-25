@@ -11,4 +11,5 @@ class Experiment : public JSON::JsonConfig {
 
 namespace ExperimentParser {
     json getParameters(json &e, int i);
+    int numParameters(json exp);
 }}

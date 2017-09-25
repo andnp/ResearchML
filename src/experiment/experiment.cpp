@@ -2,15 +2,6 @@
 #include "util/json.hpp"
 
 namespace GPUCompute {
-int numParameters(json exp) {
-    int num = 1;
-    json sweeps = exp;
-    for (const auto& j : json::iterator_wrapper(sweeps)) {
-        num *= sweeps[j.key()].size();
-    }
-    return num;
-}
-
 namespace ExperimentParser {
     json getParameters(json& e, int index) {
         json output = {};
@@ -24,5 +15,14 @@ namespace ExperimentParser {
         }
 
         return output;
+    }
+
+    int numParameters(json exp) {
+        int num = 1;
+        json sweeps = exp;
+        for (const auto& j : json::iterator_wrapper(sweeps)) {
+            num *= sweeps[j.key()].size();
+        }
+        return num;
     }
 }}
