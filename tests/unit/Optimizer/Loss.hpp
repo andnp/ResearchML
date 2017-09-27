@@ -20,7 +20,8 @@ TEST(Loss, leastSquaresLoss) {
     auto l = Loss::leastSquaresLoss(CE, inputs[0], inputs[1], 1);
     auto outputs = CE.run(inputs, {m, n}, {l});
 
-    EXPECT_TRUE(_::isClose(outputs[0](0, 0), 2.0));
+    Numeric_t e = 2.0;
+    EXPECT_TRUE(_::isClose(outputs[0](0, 0), e));
 }
 
 int inThresh(const Numeric_t x, const Numeric_t t, const Numeric_t thresh) {
@@ -33,7 +34,7 @@ Numeric_t threshlog(const Numeric_t x, const Numeric_t thresh = 1e-4) {
 
 Numeric_t crossEntropy(const MatrixRef P, const MatrixRef Y) {
     const int numsamples = P.cols();
-    auto expr = [](Numeric_t p, Numeric_t y) {
+    auto expr = [](Numeric_t p, Numeric_t y) -> Numeric_t {
         return (y*threshlog(p) + (1.0 - y)*threshlog(1.0 - p));
     };
     const Numeric_t los = P.binaryExpr(Y, expr).sum();
@@ -58,5 +59,5 @@ TEST(Loss, crossEntopyLoss) {
     auto l = Loss::crossEntropyLoss(CE, inputs[0], inputs[1], 1);
     auto outputs = CE.run(inputs, {m, n}, {l});
 
-    EXPECT_TRUE(_::isClose(outputs[0](0, 0) / 3.0, crossEntropy(m, n)));
+    EXPECT_TRUE(_::isClose(outputs[0](0, 0) / static_cast<Numeric_t>(3.0), crossEntropy(m, n)));
 }

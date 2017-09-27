@@ -231,7 +231,7 @@ TEST(ComputeEngine, Multiple_broadcast) {
 
     auto input = CE.InputVariable();
     // Note here that the constant value needs to be a double
-    auto n = CE.Multiply(input, 2.0);
+    auto n = CE.Multiply(input, static_cast<Numeric_t>(2.0));
     auto outputs = CE.run({input}, {m}, {n});
 
     Matrix e(2, 2);

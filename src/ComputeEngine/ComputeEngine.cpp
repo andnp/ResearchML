@@ -198,7 +198,7 @@ namespace GPUCompute {
     };
 
     TFNode ComputeEngine::MaxLog(Input a) {
-        return Max(Log(a), -1e8);
+        return Max(Log(a), static_cast<Numeric_t>(-1e8));
     };
 
     TFNode ComputeEngine::MatrixSum(Input a) {

@@ -14,13 +14,13 @@ namespace GPUCompute {
     using namespace tensorflow;
     using namespace tensorflow::ops;
 
-    using Matrix = Eigen::MatrixXd;
-    using Vector = Eigen::VectorXd;
+    using Matrix = Eigen::MatrixXf;
+    using Vector = Eigen::VectorXf;
     using MatrixRef = Eigen::Ref<const Matrix>;
     using MutMatrixRef = Eigen::Ref<Matrix>;
     using TFNode = tensorflow::Output;
     extern DataType Tensor_t;
-    typedef double Numeric_t;
+    typedef float Numeric_t;
 
 namespace MatrixUtil {
     std::vector<int> getDimensions(std::string file);

@@ -12,7 +12,8 @@ namespace Loss {
 
     TFNode leastSquaresLossGradient(ComputeEngine &CE, Input Yhat, Input Y, int samples) {
         Numeric_t t = static_cast<Numeric_t>(samples);
-        return CE.Div(CE.Multiply(2.0, CE.Sub(Yhat, Y)), t);
+        Numeric_t two = 2.0;
+        return CE.Div(CE.Multiply(two, CE.Sub(Yhat, Y)), t);
     }
 
     TFNode crossEntropyLoss(ComputeEngine &CE, TFNode P, TFNode Y, int samples) {
@@ -20,10 +21,11 @@ namespace Loss {
         // Y * log(P)
         auto a = CE.Multiply(Y, CE.MaxLog(P));
         // (1 - Y) * log(1 - P)
-        auto b = CE.Multiply(CE.Sub(1.0, Y), CE.MaxLog(CE.Sub(1.0, P)));
+        Numeric_t one = 1.0;
+        auto b = CE.Multiply(CE.Sub(one, Y), CE.MaxLog(CE.Sub(one, P)));
         auto c = CE.Add(a, b);
         auto S = CE.MatrixSum(c);
-        return CE.Multiply(CE.Div(-1.0, t), S);
+        return CE.Multiply(CE.Div(-one, t), S);
     }
 
     TFNode gradientCrossEntropy(ComputeEngine &CE, TFNode Yhat, TFNode Y, int samples) {
@@ -32,7 +34,8 @@ namespace Loss {
     };
 
     TFNode sigmoidGradient(ComputeEngine &CE, TFNode X) {
-        return CE.Multiply(X, CE.Sub(1.0, X));
+        Numeric_t one = 1.0;
+        return CE.Multiply(X, CE.Sub(one, X));
     }
 
     TFNode l2Norm(ComputeEngine &CE, TFNode X, int samples) {

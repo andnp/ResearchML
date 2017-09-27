@@ -104,7 +104,7 @@ namespace Optimizer {
         });
 
         return optimize(CE, X, Y, Parameters, opt_params, getGradient, getLoss, [&CE, rho, epsilon, &EG, &dW](TFNode P, TFNode G, int i) {
-            return CE.ApplyAdadelta(P, EG[i], dW[i], 1.0, rho, epsilon, G);
+            return CE.ApplyAdadelta(P, EG[i], dW[i], static_cast<Numeric_t>(1.0), rho, epsilon, G);
         });
     };
 

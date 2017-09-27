@@ -7,7 +7,7 @@
 #include "util/Random/rand.hpp"
 
 namespace GPUCompute {
-    DataType Tensor_t = DT_DOUBLE;
+    DataType Tensor_t = DT_FLOAT;
 
 namespace MatrixUtil {
     std::vector<int> getDimensions(std::string file) {

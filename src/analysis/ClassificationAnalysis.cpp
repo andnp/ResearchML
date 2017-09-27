@@ -5,7 +5,7 @@ namespace GPUCompute {
 namespace Analysis {
     std::vector<Numeric_t> MultiClassClassificationError(const Matrix &P, const Matrix &Y) {
         int classes = Y.rows();
-        auto thresh_f = [](Numeric_t x) {
+        auto thresh_f = [](Numeric_t x) -> Numeric_t {
             return x > 0.5 ? 1.0 : 0.0;
         };
         std::vector<Numeric_t> error(classes);
@@ -17,7 +17,7 @@ namespace Analysis {
     }
 
     Numeric_t ClassificationError(const Matrix &P, const Matrix &Y) {
-        auto thresh_f = [](Numeric_t x) {
+        auto thresh_f = [](Numeric_t x) -> Numeric_t {
             return x > 0.5 ? 1.0 : 0.0;
         };
 
