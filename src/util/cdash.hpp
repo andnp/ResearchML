@@ -40,7 +40,7 @@ namespace _ {
 
     template<typename T>
     std::vector<T> head(std::vector<T> vector, int h) {
-        if (h > vector.size() || h < 1) throw "_::head must be in range [1, v.size()]";
+        if (h > vector.size() || h < 0) throw "_::head must be in range [0, v.size()]";
         std::vector<T> out = {};
         for (int i = 0; i < h; ++i) {
             out.push_back(vector[i]);
