@@ -319,6 +319,32 @@ TEST(ComputeEngine, GradientDescent) {
     EXPECT_TRUE(MatrixUtil::areMatricesEqual(o, e));
 }
 
+// -------------
+// CaptureValues
+// -------------
+
+TEST(ComputeEngine, CaptureValues) {
+    ComputeEngine CE;
+
+    Matrix a(2, 2);
+    a << 1, 2, 3, 4;
+    Matrix b(2, 2);
+    b << 4, 3, 2, 1;
+
+    auto inputs = CE.InputVariables(2);
+    auto C = CE.Add(inputs[0], inputs[1]);
+    bool passed = false;
+    CE.CaptureValues(C, [&passed](Matrix &C) {
+        Matrix e(2, 2);
+        e << 5, 5, 5, 5;
+        passed = MatrixUtil::areMatricesEqual(C, e);
+    });
+
+    CE.run(inputs, {a, b}, {});
+
+    EXPECT_TRUE(passed);
+}
+
 // ---
 // Run
 // ---

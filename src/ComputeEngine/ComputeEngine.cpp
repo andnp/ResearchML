@@ -1,4 +1,5 @@
 #include "ComputeEngine.hpp"
+#include "util/cdash.hpp"
 
 namespace GPUCompute {
     void checkStatus(const Status &status) {
@@ -217,12 +218,30 @@ namespace GPUCompute {
         return tensorflow::ops::ApplyAdadelta(root, w, EG, dW, lr, rho, epsilon, grad);
     };
 
+    void ComputeEngine::CaptureValues(tensorflow::Output a, std::function<void(Matrix&)> callback) {
+        captures.push_back(std::make_tuple(a, callback));
+    };
 
     std::vector<Tensor> ComputeEngine::run(const ClientSession::FeedType& inputs, const std::vector<tensorflow::Output> outputs) {
         InitializeVariables();
+        int numOutputs = outputs.size();
+        std::vector<tensorflow::Output> targets = _::clone(outputs);
+        _::forEach(captures, [&targets](auto &c) {
+            auto input = std::get<0>(c);
+            targets.push_back(input);
+        });
         std::vector<Tensor> outs;
-        TF_CHECK_OK(this->session->Run(inputs, outputs, &outs));
-        return outs;
+        TF_CHECK_OK(this->session->Run(inputs, targets, &outs));
+
+        int c_index = 0;
+        for (int i = numOutputs; i < targets.size(); ++i) {
+            auto f = std::get<1>(captures[c_index]);
+            auto m = getMatrixFromTensor(outs[i]);
+            f(m);
+            ++c_index;
+        }
+
+        return _::head(outs, numOutputs);
     };
 
     std::vector<Matrix> ComputeEngine::run(const tensorflow::OutputList &inputs, const std::vector<Matrix> &inits, const tensorflow::OutputList outputs) {

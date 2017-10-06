@@ -5,6 +5,7 @@
 #include <tensorflow/core/framework/tensor.h>
 #include <tensorflow/core/public/session.h>
 #include <tensorflow/core/platform/env.h>
+#include <tuple>
 
 #include "util/cdash.hpp"
 #include "ComputeEngine/matrix.hpp"
@@ -25,6 +26,11 @@ class ComputeEngine {
     ClientSession *session = new ClientSession(root);
     std::map<std::string, std::shared_ptr<Scope>> sub_scopes;
     std::vector<std::function<void()>> to_init = {};
+    std::vector<
+        std::tuple<
+            tensorflow::Output,
+            std::function<void(Matrix&)>>> captures = {};
+
     int hasInitialized = 0;
     int hasScope(std::string scope);
     Scope getSubScope(std::string scope);
@@ -72,6 +78,7 @@ public:
     TFNode InputVariable();
     tensorflow::OutputList InputVariables(int n);
     void InitializeVariables();
+    void CaptureValues(tensorflow::Output a, std::function<void(Matrix&)> callback);
     TFNode Copy(Input T);
     std::vector<Tensor> run(const ClientSession::FeedType &inputs, const std::vector<TFNode> outputs);
     std::vector<Matrix> run(const tensorflow::OutputList &inputs, const std::vector<Matrix> &inits, const tensorflow::OutputList outputs);

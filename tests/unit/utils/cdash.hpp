@@ -154,3 +154,22 @@ TEST(cdash, contains) {
     EXPECT_TRUE(_::contains(str, " th"));
     EXPECT_FALSE(_::contains(str, " their"));
 }
+
+TEST(cdash, clone) {
+    std::vector<int> a = {1, 2, 3};
+    auto b = _::clone(a);
+    b.push_back(4);
+    a.push_back(5);
+    EXPECT_EQ(_::last(a), 5);
+    EXPECT_EQ(a.size(), 4);
+    EXPECT_EQ(_::last(b), 4);
+    EXPECT_EQ(b.size(), 4);
+}
+
+TEST(cdash, head) {
+    std::vector<int> v = {1, 2, 3, 4, 5};
+    auto h = _::head(v, 2);
+    EXPECT_EQ(h.size(), 2);
+    EXPECT_EQ(h[0], 1);
+    EXPECT_EQ(h[1], 2);
+}

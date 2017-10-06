@@ -58,6 +58,5 @@ TEST(matrix, stackCols) {
          5, 6, 7, 8;
 
     auto o = MatrixUtil::stackCols({m, n});
-    std::cout << o << std::endl;
     EXPECT_TRUE(MatrixUtil::areMatricesEqual(e, o));
 }

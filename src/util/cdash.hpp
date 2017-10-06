@@ -22,6 +22,11 @@ namespace _ {
         return out;
     }
 
+    template<typename T>
+    std::vector<T> clone(std::vector<T> vector) {
+        return map<T, T>(vector, [](T x) { return x; });
+    }
+
     template <typename T1, typename T2, typename O, class Func_t>
     std::vector<O> zip(std::vector<T1> v1, std::vector<T2> v2, Func_t f) {
         std::vector<O> out = {};
@@ -29,6 +34,16 @@ namespace _ {
             out.push_back(
                 f(v1[i], v2[i])
             );
+        }
+        return out;
+    }
+
+    template<typename T>
+    std::vector<T> head(std::vector<T> vector, int h) {
+        if (h > vector.size() || h < 1) throw "_::head must be in range [1, v.size()]";
+        std::vector<T> out = {};
+        for (int i = 0; i < h; ++i) {
+            out.push_back(vector[i]);
         }
         return out;
     }
