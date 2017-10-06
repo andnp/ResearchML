@@ -72,11 +72,22 @@
         "stack": "cpp",
         "unordered_map": "cpp",
         "unordered_set": "cpp",
-        "hashtable": "cpp"
+        "hashtable": "cpp",
+        "__nullptr": "cpp",
+        "string_view": "cpp"
     },
     "files.watcherExclude": {
         "**/.git/**/": true,
         "**/build/**": true,
         "**/external/**": true
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/*.html": true,
+        "**/*.css": true
     }
 }
