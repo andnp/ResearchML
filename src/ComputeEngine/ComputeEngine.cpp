@@ -198,6 +198,14 @@ namespace GPUCompute {
         return tensorflow::ops::Log(root, a);
     };
 
+    TFNode ComputeEngine::Min(Input a, Input b) {
+        return tensorflow::ops::Minimum(root, a, b);
+    };
+
+    TFNode ComputeEngine::Sign(Input a) {
+        return tensorflow::ops::Sign(root, a);
+    };
+
     TFNode ComputeEngine::Max(Input a, Input b) {
         return tensorflow::ops::Maximum(root, a, b);
     };

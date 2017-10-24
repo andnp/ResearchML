@@ -68,6 +68,8 @@ public:
     TFNode SquaredDifference(Input a, Input b);
     TFNode OnesLike(Input a);
     TFNode Log(Input a);
+    TFNode Min(Input a, Input b);
+    TFNode Sign(Input a);
     TFNode Max(Input a, Input b);
     TFNode MaxLog(Input a);
     TFNode MatrixSum(Input a);
