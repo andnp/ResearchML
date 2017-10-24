@@ -190,6 +190,10 @@ namespace GPUCompute {
         return tensorflow::ops::SquaredDifference(root, a, b);
     };
 
+    TFNode ComputeEngine::OnesLike(Input a) {
+        return tensorflow::ops::OnesLike(root, a);
+    };
+
     TFNode ComputeEngine::Log(Input a) {
         return tensorflow::ops::Log(root, a);
     };

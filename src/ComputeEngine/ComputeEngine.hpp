@@ -66,6 +66,7 @@ public:
     TFNode Identity(Input a);
     TFNode Transpose(Input a);
     TFNode SquaredDifference(Input a, Input b);
+    TFNode OnesLike(Input a);
     TFNode Log(Input a);
     TFNode Max(Input a, Input b);
     TFNode MaxLog(Input a);

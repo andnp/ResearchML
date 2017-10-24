@@ -10,7 +10,8 @@ namespace Util {
             {"target_char", 0},
             {"one_hot", true},
             {"scale_data", true},
-            {"is_row_major", true}
+            {"is_row_major", true},
+            {"bias", true}
         };
         JSON::extendJson(defaults, j);
         return defaults;
@@ -22,6 +23,7 @@ namespace Util {
         bool use_one_hot = options["one_hot"];
         bool scale_data = options["scale_data"];
         bool should_transpose = options["is_row_major"];
+        bool add_bias = options["bias"];
         int target_position = options["target_char"];
 
 
@@ -43,6 +45,11 @@ namespace Util {
         const int samples = X.rows();
         const int features = X.cols();
         const int classes = Y.cols();
+
+        if (add_bias) {
+            Numeric_t one = 1.0;
+            X = MatrixUtil::stackCols({X, Matrix::Constant(X.rows(), 1, one)});
+        }
 
         if (should_transpose) {
             X.transposeInPlace();
