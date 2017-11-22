@@ -60,6 +60,7 @@ namespace Util {
         if (should_transform) {
             Matrix KX;
             Transformations::kernelTransformation(KX, X, options["kernel"]);
+            X = KX;
         }
 
         if (scale_data) {
