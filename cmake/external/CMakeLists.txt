@@ -80,6 +80,6 @@ ExternalProject_Add(Protobuf
         DOWNLOAD_DIR ${CMAKE_CURRENT_BINARY_DIR}
         BUILD_IN_SOURCE 1
         CONFIGURE_COMMAND  pwd && ./autogen.sh && ./configure --prefix=${EXTERNAL_DIR}
-        BUILD_COMMAND make
+        BUILD_COMMAND make -j8
         INSTALL_COMMAND make install
 )

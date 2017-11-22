@@ -14,7 +14,8 @@ namespace Preprocess {
         O = Matrix::Zero(rows, numNewCols);
         for (int j = 0; j < cols; ++j) {
             for (int i = 0; i < rows; ++i) {
-                O(i, offset + I(i, j)) = 1;
+                int col = offset + I(i, j);
+                O(i, col) = 1;
             }
             offset += maxes[j];
         }

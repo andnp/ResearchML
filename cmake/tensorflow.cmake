@@ -1,6 +1,7 @@
 set(TF_INCLUDE  ${EXTERNAL_DIR}/tensorflow/include/google/tensorflow
                 ${EXTERNAL_DIR}/tensorflow/include
                 ${EXTERNAL_DIR}/src/Eigen
+                ${EXTERNAL_DIR}/src/nsync/public
                 ${EXTERNAL_DIR}/include)
 find_library(TF_LIB NAMES tensorflow_all
         HINTS
