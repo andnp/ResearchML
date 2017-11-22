@@ -47,7 +47,7 @@ add_library(gpucompute gpucompute.cpp gpucompute.hpp)
 
 
 # Make sure this only builds when tensorflow is done installing
-target_link_libraries(gpucompute ${EXPERIMENT} ${ALGORITHMS} ${TRANSFORMATIONS} ${OPTIMIZER} ${ANALYSIS} ${DATALOADER} ${COMPUTE_ENGINE} ${UTILS} ${PROJECT_LIBRARIES})
+target_link_libraries(gpucompute ${EXPERIMENT} ${ALGORITHMS} ${OPTIMIZER} ${ANALYSIS} ${DATALOADER} ${TRANSFORMATIONS} ${COMPUTE_ENGINE} ${UTILS} ${PROJECT_LIBRARIES})
 
 if (BUILD_TESTS)
   include(cmake/gtest.cmake)
