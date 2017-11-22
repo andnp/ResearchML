@@ -1,6 +1,7 @@
 #include "utils.hpp"
 #include <string>
 #include "util/cdash.hpp"
+#include "transformations/kernel.hpp"
 
 namespace GPUCompute {
 namespace DataLoader {
@@ -25,7 +26,7 @@ namespace Util {
         bool should_transpose = options["is_row_major"];
         bool add_bias = options["bias"];
         int target_position = options["target_char"];
-
+        bool should_transform = !options["kernel"].is_null();
 
         Matrix data;
         MatrixUtil::readMatrix(filepath, data);
@@ -54,6 +55,11 @@ namespace Util {
         if (should_transpose) {
             X.transposeInPlace();
             Y.transposeInPlace();
+        }
+
+        if (should_transform) {
+            Matrix KX;
+            Transformations::kernelTransformation(KX, X, options["kernel"]);
         }
 
         if (scale_data) {

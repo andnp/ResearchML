@@ -17,6 +17,7 @@
 #include "src/Optimizer/Loss/loss.hpp"
 #include "src/Optimizer/Opimizer.hpp"
 #include "src/Optimizer/utils/utils.hpp"
+#include "src/transformations/kernel.hpp"
 #include "src/util/cdash.hpp"
 #include "src/util/Files/files.hpp"
 #include "src/util/json.hpp"

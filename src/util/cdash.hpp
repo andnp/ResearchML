@@ -4,6 +4,8 @@
 #include <string>
 #include <sstream>
 
+#include "util/Random/rand.hpp"
+
 namespace GPUCompute {
 namespace _ {
     template <class T, class UnaryFunction>
@@ -165,6 +167,16 @@ namespace _ {
             if (a[i] != b[i]) return false;
         }
         return true;
+    }
+
+    inline
+    std::vector<int> shuffle(size_t number = 1) {
+        std::vector<int> v(number);
+        for (int i = 0; i < number; i++) {
+            v[i] = i;
+        }
+        std::shuffle(std::begin(v), std::end(v), *Random::instance().getEngine());
+        return v;
     }
 }  // namespace _
 }  // namespace GPUCompute
