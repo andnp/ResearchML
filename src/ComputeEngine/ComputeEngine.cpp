@@ -280,8 +280,10 @@ namespace GPUCompute {
     ComputeEngine::ComputeEngine() {
         if (FORCE_CPU) {
             this->root = (Scope::NewRootScope()).WithDevice("/cpu:0");
-            auto options = SessionOptions();
-            options.config.mutable_gpu_options()->set_per_process_gpu_memory_fraction(0.0);
+            options.config.mutable_gpu_options()->set_per_process_gpu_memory_fraction(0.01);
+            options.config.set_allow_soft_placement(false);
+            options.config.mutable_gpu_options()->set_allow_growth(true);
+            std::cout << options.config.device_count().at("gpu") << std::endl;
             this->session = new ClientSession(this->root, options);
         }
     }

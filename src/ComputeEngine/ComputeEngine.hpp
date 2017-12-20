@@ -34,6 +34,7 @@ class ComputeEngine {
     int hasInitialized = 0;
     int hasScope(std::string scope);
     Scope getSubScope(std::string scope);
+    SessionOptions options = SessionOptions();
 
 public:
     static bool FORCE_CPU;
