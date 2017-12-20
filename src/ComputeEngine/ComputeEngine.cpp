@@ -283,7 +283,9 @@ namespace GPUCompute {
             options.config.mutable_gpu_options()->set_per_process_gpu_memory_fraction(0.01);
             options.config.set_allow_soft_placement(false);
             options.config.mutable_gpu_options()->set_allow_growth(true);
-            std::cout << options.config.device_count().at("gpu") << std::endl;
+            this->session = new ClientSession(this->root, options);
+        } else {
+            options.config.mutable_gpu_options()->set_allow_growth(true);
             this->session = new ClientSession(this->root, options);
         }
     }
