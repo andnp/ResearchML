@@ -280,7 +280,9 @@ namespace GPUCompute {
     ComputeEngine::ComputeEngine() {
         if (FORCE_CPU) {
             this->root = (Scope::NewRootScope()).WithDevice("/cpu:0");
-            this->session = new ClientSession(this->root);
+            auto options = SessionOptions();
+            options.config.mutable_gpu_options()->set_per_process_gpu_memory_fraction(0.0);
+            this->session = new ClientSession(this->root, options);
         }
     }
 };
