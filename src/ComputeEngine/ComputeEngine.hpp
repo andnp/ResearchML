@@ -68,12 +68,15 @@ public:
     TFNode Transpose(Input a);
     TFNode SquaredDifference(Input a, Input b);
     TFNode OnesLike(Input a);
+    TFNode ZerosLike(Input a);
+    TFNode LikeX(Input a, Input x);
     TFNode Log(Input a);
     TFNode Min(Input a, Input b);
     TFNode Sign(Input a);
     TFNode Max(Input a, Input b);
     TFNode MaxLog(Input a);
     TFNode MatrixSum(Input a);
+    TFNode Threshold(Input a, Input thresh);
     TFNode Print(Input a, InputList data, const tensorflow::ops::Print::Attrs &attrs);
     TFNode ApplyGradientDescent(Input w, Input alpha, Input grad);
     TFNode ApplyAdadelta(Input w, Input EG, Input dW, Input lr, Input rho, Input epsilon, Input grad);

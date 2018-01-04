@@ -170,7 +170,7 @@ namespace GPUCompute {
     };
 
     tensorflow::Output ComputeEngine::Copy(Input T) {
-        auto Z = ZerosLike(root, T);
+        auto Z = ZerosLike(T);
         return Sub(T, Z);
     };
 
@@ -192,6 +192,14 @@ namespace GPUCompute {
 
     TFNode ComputeEngine::OnesLike(Input a) {
         return tensorflow::ops::OnesLike(root, a);
+    };
+
+    TFNode ComputeEngine::ZerosLike(Input a) {
+        return tensorflow::ops::ZerosLike(root, a);
+    };
+
+    TFNode ComputeEngine::LikeX(Input a, Input x) {
+        return Multiply(x, OnesLike(a));
     };
 
     TFNode ComputeEngine::Log(Input a) {
@@ -216,6 +224,14 @@ namespace GPUCompute {
 
     TFNode ComputeEngine::MatrixSum(Input a) {
         return Sum(Sum(a, 1), 0);
+    };
+
+    TFNode ComputeEngine::Threshold(Input a, Input thresh) {
+        return tensorflow::ops::Where3(root,
+            tensorflow::ops::Less(root, a, thresh),
+            ZerosLike(a),
+            a
+        );
     };
 
     TFNode ComputeEngine::Print(Input a, InputList data, const tensorflow::ops::Print::Attrs &attrs) {

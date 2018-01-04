@@ -12,7 +12,9 @@ namespace Optimizer {
         JSON::extendJson(config, {
             {"batch_size", 1},
             {"threshold", 1.0e-6},
-            {"max_steps", -1}
+            {"max_steps", -1},
+            {"reg_threshold", 1.0e-5},
+            {"shuffle", true}
         });
         JSON::extendJson(config, j);
         return config;
@@ -27,8 +29,10 @@ namespace Optimizer {
         int features = X.rows();
         int batch_size = opt_params["batch_size"];
         Numeric_t threshold = opt_params["threshold"];
+        Numeric_t reg_threshold = opt_params["reg_threshold"];
         int max_steps = opt_params["max_steps"];
         int samples = X.cols();
+        bool should_shuffle = opt_params["shuffle"];
 
         if (samples / batch_size > 1000) Logger::warn() << "Number of minibatches is quite large. This may cause algorithm to spend unnecessary time creating computational graph." << std::endl;
 
@@ -38,7 +42,7 @@ namespace Optimizer {
             return CE.Var(x);
         });
 
-        auto shuffled = Optimizer::Util::shuffleTensors(CE, data);
+        auto shuffled = should_shuffle ? Optimizer::Util::shuffleTensors(CE, data) : data;
         Optimizer::Util::splitMinibatch(CE, shuffled[0], shuffled[1], samples, batch_size, [&P, features, getGradient, opt](auto &CE, auto X, auto Y, int batch_samples) {
             json dims = {{"samples", batch_samples}, {"features", features}};
             auto G = getGradient(CE, X, Y, P, dims);

@@ -157,6 +157,33 @@ TEST(ComputeEngine, MatMul_transposeB) {
     EXPECT_TRUE(MatrixUtil::areMatricesEqual(o, e));
 }
 
+// ---------
+// Threshold
+// ---------
+
+// we can get the threshold values of a matrix
+TEST(ComputeEngine, threshold) {
+    ComputeEngine CE;
+
+    Matrix m(2, 2);
+    m << 1, 2, 3, 4;
+
+    Matrix t(2, 2);
+    t << 3, 3, 3, 3;
+
+    auto a = CE.InputVariable();
+    auto b = CE.InputVariable();
+    auto c = CE.Threshold(a, b);
+
+    auto outputs = CE.run({a, b}, {m, t}, {c});
+    auto o = outputs[0];
+
+    Matrix e(2, 2);
+    e << 0, 0, 3, 4;
+
+    EXPECT_TRUE(MatrixUtil::areMatricesEqual(o, e));
+}
+
 // ---
 // Sum
 // ---
